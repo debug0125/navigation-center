@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd" default-autowire="byName">
+
+
+    <!--<bean id="springContextApplicationUtil" class="com.help.center.service.util.SpringContextApplicationUtil"></bean>-->
+
+    <!--<import resource="spring/datasource/spring-datasource.xml"/>-->
+    <!--<import resource="spring/spring-dubbo-config.xml"/>-->
+    <!--<import resource="spring/spring-dubbo-provider.xml"/>-->
+    <!--<import resource="spring/spring-help-service.xml"/>-->
+    <!--<import resource="spring/spring-process.xml"/>-->
+
+
+</beans>
