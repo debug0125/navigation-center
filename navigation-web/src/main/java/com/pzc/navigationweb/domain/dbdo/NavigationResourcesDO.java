@@ -11,7 +11,7 @@ public class NavigationResourcesDO extends BaseDO {
 
     private String name;
 
-    private String desc;
+    private String description;
 
     private String navigationUrl;
 

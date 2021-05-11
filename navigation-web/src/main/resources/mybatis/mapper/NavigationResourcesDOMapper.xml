@@ -10,14 +10,14 @@
     <result column="version" jdbcType="INTEGER" property="version" />
     <result column="is_del" jdbcType="TINYINT" property="isDel" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="desc" jdbcType="VARCHAR" property="desc" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="navigation_url" jdbcType="VARCHAR" property="navigationUrl" />
     <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
     <result column="detail" jdbcType="VARCHAR" property="detail" />
     <result column="type" jdbcType="INTEGER" property="type" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, create_date, create_name, modify_date, modify_name, version, is_del, name, desc, 
+    id, create_date, create_name, modify_date, modify_name, version, is_del, name, description,
     navigation_url, logo_url, detail, type
   </sql>
 
@@ -35,12 +35,12 @@
   <insert id="insert" parameterType="com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO">
     insert into navigation_resources (id, create_date, create_name, 
       modify_date, modify_name, version, 
-      is_del, name, desc, 
+      is_del, name, description,
       navigation_url, logo_url, detail, 
       type)
     values (#{id,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{createName,jdbcType=VARCHAR}, 
       #{modifyDate,jdbcType=TIMESTAMP}, #{modifyName,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, 
-      #{isDel,jdbcType=TINYINT}, #{name,jdbcType=VARCHAR}, #{desc,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=TINYINT}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
       #{navigationUrl,jdbcType=VARCHAR}, #{logoUrl,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR}, 
       #{type,jdbcType=INTEGER})
   </insert>
@@ -71,8 +71,8 @@
       <if test="name != null">
         name,
       </if>
-      <if test="desc != null">
-        desc,
+      <if test="description != null">
+        description,
       </if>
       <if test="navigationUrl != null">
         navigation_url,
@@ -112,8 +112,8 @@
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="desc != null">
-        #{desc,jdbcType=VARCHAR},
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
       </if>
       <if test="navigationUrl != null">
         #{navigationUrl,jdbcType=VARCHAR},
@@ -153,8 +153,8 @@
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="desc != null">
-        desc = #{desc,jdbcType=VARCHAR},
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
       </if>
       <if test="navigationUrl != null">
         navigation_url = #{navigationUrl,jdbcType=VARCHAR},
@@ -180,7 +180,7 @@
       version = #{version,jdbcType=INTEGER},
       is_del = #{isDel,jdbcType=TINYINT},
       name = #{name,jdbcType=VARCHAR},
-      desc = #{desc,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
       navigation_url = #{navigationUrl,jdbcType=VARCHAR},
       logo_url = #{logoUrl,jdbcType=VARCHAR},
       detail = #{detail,jdbcType=VARCHAR},

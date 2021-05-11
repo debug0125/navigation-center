@@ -12,7 +12,7 @@ public class NavigationResourcesReqDTO extends ReqDTO {
 
     private String name;
 
-    private String desc;
+    private String description;
 
     private String navigationUrl;
 

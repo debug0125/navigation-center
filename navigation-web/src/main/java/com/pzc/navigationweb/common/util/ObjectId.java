@@ -118,6 +118,7 @@ public final class ObjectId implements Comparable<ObjectId>, Serializable {
         return _nextInc.get();
     }
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

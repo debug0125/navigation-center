@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public class InitDOUtil {
 
-    private static final String ACCOUNT = "pxz";
+    private static final String ACCOUNT = "pzc";
 
     public static void initField(BaseDOInt doInt){
 
