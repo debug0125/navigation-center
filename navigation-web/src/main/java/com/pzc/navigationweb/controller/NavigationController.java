@@ -1,5 +1,8 @@
 package com.pzc.navigationweb.controller;
 
+import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
+import com.pzc.navigationweb.service.NavigationResourcesService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,11 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(NavigationController.PAGE_NAME)
 public class NavigationController {
-
     public static final String PAGE_NAME = "/navigation";
 
+    @Autowired
+    private NavigationResourcesService navigationResourcesService;
+
     @RequestMapping("/submit")
-    public String submit(String aa) {
-        return "index";
+    public Boolean submit(NavigationResourcesReqDTO navigationResourcesReqDTO) {
+        return navigationResourcesService.submit(navigationResourcesReqDTO);
     }
 }
