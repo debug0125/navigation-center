@@ -1,5 +1,6 @@
 package com.pzc.navigationweb.controller;
 
+import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
 import com.pzc.navigationweb.service.NavigationResourcesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class NavigationController {
     private NavigationResourcesService navigationResourcesService;
 
     @RequestMapping("/submit")
-    public Boolean submit(NavigationResourcesReqDTO navigationResourcesReqDTO) {
+    public Result<Boolean> submit(NavigationResourcesReqDTO navigationResourcesReqDTO) {
         return navigationResourcesService.submit(navigationResourcesReqDTO);
     }
 }

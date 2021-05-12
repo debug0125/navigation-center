@@ -1,5 +1,6 @@
 package com.pzc.navigationweb.service;
 
+import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +15,5 @@ public interface NavigationResourcesService {
      * @param navigationResourcesReqDTO
      * @return
      */
-    Boolean submit(NavigationResourcesReqDTO navigationResourcesReqDTO);
+    Result<Boolean> submit(NavigationResourcesReqDTO navigationResourcesReqDTO);
 }
