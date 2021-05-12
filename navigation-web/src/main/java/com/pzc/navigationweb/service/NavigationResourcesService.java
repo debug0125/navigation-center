@@ -1,8 +1,9 @@
 package com.pzc.navigationweb.service;
 
+import com.github.pagehelper.PageInfo;
 import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
-import org.springframework.stereotype.Service;
+import com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO;
 
 /**
  * @author ryf
@@ -16,4 +17,11 @@ public interface NavigationResourcesService {
      * @return
      */
     Result<Boolean> submit(NavigationResourcesReqDTO navigationResourcesReqDTO);
+
+    /**
+     * 查询资源
+     * @param navigationResourcesReqDTO
+     * @return
+     */
+    Result<PageInfo<NavigationResourcesRespDTO>> pageNavigation(NavigationResourcesReqDTO navigationResourcesReqDTO);
 }

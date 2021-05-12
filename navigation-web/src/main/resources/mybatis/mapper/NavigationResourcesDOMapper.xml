@@ -20,12 +20,40 @@
     id, create_date, create_name, modify_date, modify_name, version, is_del, name, description,
     navigation_url, logo_url, detail, type
   </sql>
+  
+  <sql id="selectTable">
+    select
+    <include refid="Base_Column_List"/>
+    from navigation_resources
+  </sql>
+  <sql id="condition">
+    <where>
+    is_del = 0
+      <if test="name != null and name != ''">
+        and name like concat('%',#{name},'%' )
+      </if>
+      <if test="type != null and type != ''">
+        and type = #{type}
+      </if>
+    </where>
+  </sql>
+
+  <sql id="LIMIT">
+    limit #{}, #{}
+  </sql>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from navigation_resources
     where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="listNavigation" resultType="com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO"
+      parameterType="com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO">
+    <include refid="selectTable"/>
+    <include refid="condition"/>
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">

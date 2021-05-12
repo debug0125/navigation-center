@@ -1,13 +1,19 @@
 package com.pzc.navigationweb.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pzc.navigationweb.common.util.InitDOUtil;
 import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.dao.NavigationResourcesDOMapper;
 import com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO;
 import com.pzc.navigationweb.domain.mapstruct.NavigationReqToDo;
 import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
+import com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO;
 import com.pzc.navigationweb.service.NavigationResourcesService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * @author ryf
@@ -31,6 +37,16 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
             result.setSuccess(false);
             result.setErrMsg("推荐失败");
         }
+        return result;
+    }
+
+    @Override
+    public Result<PageInfo<NavigationResourcesRespDTO>> pageNavigation(NavigationResourcesReqDTO navigationResourcesReqDTO) {
+        Result<PageInfo<NavigationResourcesRespDTO>> result = new Result<>();
+        Page<NavigationResourcesRespDTO> page = PageHelper.startPage(1, 20, true);
+        navigationResourcesDOMapper.listNavigation(navigationResourcesReqDTO);
+        PageInfo<NavigationResourcesRespDTO> pageInfo = new PageInfo<>(page);
+        result.setModule(pageInfo);
         return result;
     }
 }

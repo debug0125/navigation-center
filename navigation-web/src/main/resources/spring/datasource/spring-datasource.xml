@@ -82,6 +82,7 @@
         <property name="plugins">
             <array>
                 <bean class="com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor"/>
+                <bean class="com.github.pagehelper.PageHelper"/>
             </array>
         </property>
         <!-- DO类型的包路劲，如果配置了该项，在mybatis配置xml里parameterType,ResultType直接以类名为别名，不用再加上路劲-->

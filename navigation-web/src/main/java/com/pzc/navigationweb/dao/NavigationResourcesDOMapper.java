@@ -1,8 +1,13 @@
 package com.pzc.navigationweb.dao;
 
 import com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO;
+import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
+
+import java.util.List;
 
 public interface NavigationResourcesDOMapper {
+
+    List<NavigationResourcesDO> listNavigation(NavigationResourcesReqDTO navigationResourcesReqDTO);
 
     int deleteByPrimaryKey(String id);
 

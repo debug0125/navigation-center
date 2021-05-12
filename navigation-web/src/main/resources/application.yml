@@ -3,6 +3,8 @@ server:
   servlet:
     context-path: /navigation-web
 
-spring:
-  application:
-    name: navigation
+
+# 控制台打印sql
+logging:
+  level:
+    com.pzc.navigationweb.dao : debug
