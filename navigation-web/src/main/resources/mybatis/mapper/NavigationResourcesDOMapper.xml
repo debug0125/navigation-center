@@ -51,7 +51,7 @@
   
   
   <select id="listNavigation" resultType="com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO"
-      parameterType="com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO">
+      parameterType="com.pzc.navigationweb.dto.query.NavigationQuery">
     <include refid="selectTable"/>
     <include refid="condition"/>
   </select>

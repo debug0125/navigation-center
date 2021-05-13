@@ -8,6 +8,7 @@ import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.dao.NavigationResourcesDOMapper;
 import com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO;
 import com.pzc.navigationweb.domain.mapstruct.NavigationReqToDo;
+import com.pzc.navigationweb.dto.query.NavigationQuery;
 import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
 import com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO;
 import com.pzc.navigationweb.service.NavigationResourcesService;
@@ -41,12 +42,13 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
     }
 
     @Override
-    public Result<PageInfo<NavigationResourcesRespDTO>> pageNavigation(NavigationResourcesReqDTO navigationResourcesReqDTO) {
+    public Result<PageInfo<NavigationResourcesRespDTO>> pageNavigation(NavigationQuery query) {
         Result<PageInfo<NavigationResourcesRespDTO>> result = new Result<>();
-        Page<NavigationResourcesRespDTO> page = PageHelper.startPage(1, 20, true);
-        navigationResourcesDOMapper.listNavigation(navigationResourcesReqDTO);
+        Page<NavigationResourcesRespDTO> page = PageHelper.startPage(query.getPageNo(), query.getPageSize(), true);
+        navigationResourcesDOMapper.listNavigation(query);
         PageInfo<NavigationResourcesRespDTO> pageInfo = new PageInfo<>(page);
         result.setModule(pageInfo);
+        result.setSuccess(true);
         return result;
     }
 }

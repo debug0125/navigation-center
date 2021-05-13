@@ -2,6 +2,7 @@ package com.pzc.navigationweb.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.pzc.navigationweb.common.util.Result;
+import com.pzc.navigationweb.dto.query.NavigationQuery;
 import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
 import com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO;
 import com.pzc.navigationweb.service.NavigationResourcesService;
@@ -27,7 +28,7 @@ public class NavigationController {
     }
 
     @RequestMapping("/pageNavigation")
-    public Result<PageInfo<NavigationResourcesRespDTO>> pageNavigation(NavigationResourcesReqDTO navigationResourcesReqDTO) {
-        return navigationResourcesService.pageNavigation(navigationResourcesReqDTO);
+    public Result<PageInfo<NavigationResourcesRespDTO>> pageNavigation(NavigationQuery query) {
+        return navigationResourcesService.pageNavigation(query);
     }
 }

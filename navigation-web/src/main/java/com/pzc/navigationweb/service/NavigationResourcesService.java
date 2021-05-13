@@ -2,6 +2,7 @@ package com.pzc.navigationweb.service;
 
 import com.github.pagehelper.PageInfo;
 import com.pzc.navigationweb.common.util.Result;
+import com.pzc.navigationweb.dto.query.NavigationQuery;
 import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
 import com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO;
 
@@ -20,8 +21,8 @@ public interface NavigationResourcesService {
 
     /**
      * 查询资源
-     * @param navigationResourcesReqDTO
+     * @param query
      * @return
      */
-    Result<PageInfo<NavigationResourcesRespDTO>> pageNavigation(NavigationResourcesReqDTO navigationResourcesReqDTO);
+    Result<PageInfo<NavigationResourcesRespDTO>> pageNavigation(NavigationQuery query);
 }

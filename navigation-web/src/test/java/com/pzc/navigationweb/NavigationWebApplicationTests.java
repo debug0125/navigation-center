@@ -3,6 +3,7 @@ package com.pzc.navigationweb;
 import com.github.pagehelper.PageInfo;
 import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO;
+import com.pzc.navigationweb.dto.query.NavigationQuery;
 import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
 import com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO;
 import com.pzc.navigationweb.service.NavigationResourcesService;
@@ -27,7 +28,7 @@ class NavigationWebApplicationTests {
 
     @Test
     void listTest(){
-        Result<PageInfo<NavigationResourcesRespDTO>> pageInfoResult = navigationResourcesService.pageNavigation(new NavigationResourcesReqDTO());
+        Result<PageInfo<NavigationResourcesRespDTO>> pageInfoResult = navigationResourcesService.pageNavigation(new NavigationQuery());
         if (pageInfoResult.getModule() != null) {
             System.out.println(111);
         }
