@@ -10,7 +10,7 @@
         <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
         <!--<property name="url" value="jdbc:mysql://127.0.0.1:3306/navigation_resources?useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true"/>-->
         <!--<property name="username" value="root"/>-->
-        <!--<property name="password" value="ryfla123mysql"/>-->
+        <!--<property name="password" value=""/>-->
         <!--&lt;!&ndash; 配置初始化大小、最小、最大 &ndash;&gt;-->
         <!--<property name="initialSize" value="50"/>-->
         <!--<property name="minIdle" value="50"/>-->
