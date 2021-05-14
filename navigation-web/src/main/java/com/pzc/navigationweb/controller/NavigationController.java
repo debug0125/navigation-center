@@ -31,4 +31,9 @@ public class NavigationController {
     public Result<PageInfo<NavigationResourcesRespDTO>> pageNavigation(NavigationQuery query) {
         return navigationResourcesService.pageNavigation(query);
     }
+
+    @RequestMapping("/addOpenCount")
+    public Result<NavigationResourcesRespDTO> addOpenCount(String id) {
+        return navigationResourcesService.addOpenCount(id);
+    }
 }

@@ -10,6 +10,8 @@ import lombok.Data;
 @Data
 public class NavigationResourcesRespDTO extends ReqDTO {
 
+    private String createDateStr;
+
     private String name;
 
     private String description;
@@ -21,4 +23,6 @@ public class NavigationResourcesRespDTO extends ReqDTO {
     private String detail;
 
     private String type;
+
+    private Integer openCount;
 }

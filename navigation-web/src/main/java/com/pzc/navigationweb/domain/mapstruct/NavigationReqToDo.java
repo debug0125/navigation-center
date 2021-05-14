@@ -2,6 +2,7 @@ package com.pzc.navigationweb.domain.mapstruct;
 
 import com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO;
 import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
+import com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -18,4 +19,6 @@ public interface NavigationReqToDo {
 
 
     NavigationResourcesDO reqToDo(NavigationResourcesReqDTO reqDTO);
+
+    NavigationResourcesRespDTO doToResp(NavigationResourcesDO reqDTO);
 }

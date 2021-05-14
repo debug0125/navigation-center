@@ -25,4 +25,11 @@ public interface NavigationResourcesService {
      * @return
      */
     Result<PageInfo<NavigationResourcesRespDTO>> pageNavigation(NavigationQuery query);
+
+    /**
+     * 增加打开次数
+     * @param id
+     * @return
+     */
+    Result<NavigationResourcesRespDTO> addOpenCount(String id);
 }

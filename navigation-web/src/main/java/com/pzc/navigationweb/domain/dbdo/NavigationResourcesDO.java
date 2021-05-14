@@ -20,4 +20,6 @@ public class NavigationResourcesDO extends BaseDO {
     private String detail;
 
     private String type;
+
+    private Integer openCount;
 }

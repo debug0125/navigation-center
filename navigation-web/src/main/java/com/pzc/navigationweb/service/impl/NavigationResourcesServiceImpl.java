@@ -1,5 +1,6 @@
 package com.pzc.navigationweb.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -47,8 +48,24 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
         Page<NavigationResourcesRespDTO> page = PageHelper.startPage(query.getPageNo(), query.getPageSize(), true);
         navigationResourcesDOMapper.listNavigation(query);
         PageInfo<NavigationResourcesRespDTO> pageInfo = new PageInfo<>(page);
+        pageInfo.getList().stream().forEach(x -> {
+            x.setCreateDateStr(DateUtil.formatDateTime(x.getCreateDate()));
+        });
         result.setModule(pageInfo);
         result.setSuccess(true);
+        return result;
+    }
+
+    @Override
+    public Result<NavigationResourcesRespDTO> addOpenCount(String id) {
+        Result<NavigationResourcesRespDTO> result = new Result<>();
+        NavigationResourcesDO resourcesDO = navigationResourcesDOMapper.selectByPrimaryKey(id);
+        resourcesDO.setOpenCount(resourcesDO.getOpenCount()+1);
+        result.setSuccess(navigationResourcesDOMapper.updateByPrimaryKey(resourcesDO) > 0);
+        NavigationResourcesRespDTO respDTO = NavigationReqToDo.INSTANCE.doToResp(resourcesDO);
+        respDTO.setCreateDateStr(DateUtil.formatDateTime(respDTO.getCreateDate()));
+        result.setModule(respDTO);
+
         return result;
     }
 }
