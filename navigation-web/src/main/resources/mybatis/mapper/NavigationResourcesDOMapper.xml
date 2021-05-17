@@ -16,10 +16,11 @@
     <result column="detail" jdbcType="VARCHAR" property="detail" />
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="open_count" jdbcType="INTEGER" property="openCount" />
+    <result column="like_count" jdbcType="INTEGER" property="likeCount" />
   </resultMap>
   <sql id="Base_Column_List">
     id, create_date, create_name, modify_date, modify_name, version, is_del, name, description,
-    navigation_url, logo_url, detail, type, open_count
+    navigation_url, logo_url, detail, type, open_count, like_count
   </sql>
   
   <sql id="selectTable">
@@ -37,10 +38,6 @@
         and type = #{type}
       </if>
     </where>
-  </sql>
-
-  <sql id="LIMIT">
-    limit #{}, #{}
   </sql>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -200,6 +197,9 @@
       <if test="openCount != null">
         open_count = #{openCount,jdbcType=INTEGER},
       </if>
+      <if test="likeCount != null">
+        like_count = #{likeCount,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -217,7 +217,8 @@
       logo_url = #{logoUrl,jdbcType=VARCHAR},
       detail = #{detail,jdbcType=VARCHAR},
       type = #{type,jdbcType=INTEGER},
-      open_count = #{openCount,jdbcType=INTEGER}
+      open_count = #{openCount,jdbcType=INTEGER},
+      like_count = #{likeCount,jdbcType=INTEGER}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

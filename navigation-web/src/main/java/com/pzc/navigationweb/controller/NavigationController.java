@@ -1,5 +1,6 @@
 package com.pzc.navigationweb.controller;
 
+import com.alibaba.dubbo.rpc.RpcContext;
 import com.github.pagehelper.PageInfo;
 import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.dto.query.NavigationQuery;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(NavigationController.PAGE_NAME)
-public class NavigationController {
+public class NavigationController extends BaseController {
     public static final String PAGE_NAME = "/navigation";
 
     @Autowired
@@ -35,5 +36,12 @@ public class NavigationController {
     @RequestMapping("/addOpenCount")
     public Result<NavigationResourcesRespDTO> addOpenCount(String id) {
         return navigationResourcesService.addOpenCount(id);
+    }
+
+    @RequestMapping("/toFavorite")
+    public Result<Boolean> toFavorite(String navId) {
+        String userName = RpcContext.getContext().getAttachment("username");
+
+        return new Result<>();
     }
 }

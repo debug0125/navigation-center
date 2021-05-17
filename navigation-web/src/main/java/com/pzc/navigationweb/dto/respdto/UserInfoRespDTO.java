@@ -1,4 +1,4 @@
-package com.pzc.navigationweb.dto.reqdto;
+package com.pzc.navigationweb.dto.respdto;
 
 import com.pzc.navigationweb.dto.basedto.ReqDTO;
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.Data;
  * @date 5/11/21 4:58 PM
  */
 @Data
-public class LoginUser extends ReqDTO {
+public class UserInfoRespDTO extends ReqDTO {
 
     private String token;
 

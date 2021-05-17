@@ -1,5 +1,14 @@
 package com.pzc.navigationweb.filter;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.pzc.navigationweb.common.util.CookieUtil;
+import com.pzc.navigationweb.common.util.Result;
+import com.pzc.navigationweb.common.util.UserSessionUtil;
+import com.pzc.navigationweb.constant.LoginTokenConstant;
+import com.pzc.navigationweb.constant.enumtype.UserErrorCodeEnum;
+import com.pzc.navigationweb.context.RequestContext;
+import com.pzc.navigationweb.domain.dbdo.UserDO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -7,6 +16,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.PrintWriter;
 
 /**
  * @author ryf
@@ -18,12 +28,16 @@ public class Interceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-//        System.out.println("==========jin  ru pre  handle ====");
-        HttpSession session = request.getSession();
-        if (session.getAttribute("logininfo") == null) {
-            response.setHeader("logininfo","unauth");
+        String token = CookieUtil.getCookie(request, LoginTokenConstant.TOKEN_KEY);
+        UserDO userDO = UserSessionUtil.getCurreentUser(token);
+        if (userDO == null) {
+            //若为空则返回登录界面
+            failRequest(UserErrorCodeEnum.REQUEST_TOKEN.getErrCode(), UserErrorCodeEnum.REQUEST_TOKEN.getErrCode(), response);
             return false;
         }
+
+        //用户信息 存入上下文
+        RequestContext.get().put("userInfo", userDO);
         return true;
     }
 
@@ -31,5 +45,37 @@ public class Interceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
             throws Exception {
 //        System.out.println("================= jin ru  after ===============");
+    }
+
+
+    private void failRequest(String errCode, String errMsg, HttpServletResponse response) {
+        Result result = new Result();
+        result.setErrCode(errCode);
+        result.setErrMsg(errMsg);
+        result.setSuccess(false);
+        writeAjaxJSONResponse(result, response);
+    }
+
+    private void writeAjaxJSONResponse(Result result, HttpServletResponse response) {
+        // HTTP 1.1
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        // Proxies.
+        response.setDateHeader("Expires", 0);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
+        PrintWriter writer = null;
+
+        try {
+            writer = response.getWriter();
+            writer.write(JSON.toJSONString(result, SerializerFeature.DisableCircularReferenceDetect));
+        } catch (Throwable e) {
+            //StoreLoggerUtil.getLogger().error(e.getMessage(), e);
+        } finally {
+            if (writer != null) {
+                writer.flush();
+                writer.close();
+            }
+        }
     }
 }
