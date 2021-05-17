@@ -1,6 +1,7 @@
 package com.pzc.navigationweb.common.util;
 
 import com.pzc.navigationweb.domain.dbdo.BaseDOInt;
+import com.pzc.navigationweb.domain.dbdo.UserDO;
 import com.pzc.navigationweb.dto.reqdto.LoginUser;
 
 import java.util.Date;
@@ -21,10 +22,10 @@ public class InitDOUtil {
         doInt.setVersion(1);
         doInt.setIsDel(false);
 
-        LoginUser loginUser = UserSession.getCurreentUser();
-        if (loginUser != null) {
-            doInt.setCreateName(loginUser.getAccount());
-            doInt.setModifyName(loginUser.getAccount());
+        UserDO userDO = UserSessionUtil.getCurreentUserByKey();
+        if (userDO != null) {
+            doInt.setCreateName(userDO.getAccount());
+            doInt.setModifyName(userDO.getAccount());
         } else {
             doInt.setCreateName(InitDOUtil.ACCOUNT);
             doInt.setModifyName(InitDOUtil.ACCOUNT);
