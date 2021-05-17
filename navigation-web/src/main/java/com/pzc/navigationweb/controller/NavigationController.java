@@ -3,6 +3,8 @@ package com.pzc.navigationweb.controller;
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.github.pagehelper.PageInfo;
 import com.pzc.navigationweb.common.util.Result;
+import com.pzc.navigationweb.common.util.UserSessionUtil;
+import com.pzc.navigationweb.domain.dbdo.UserDO;
 import com.pzc.navigationweb.dto.query.NavigationQuery;
 import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
 import com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO;
@@ -40,7 +42,7 @@ public class NavigationController extends BaseController {
 
     @RequestMapping("/toFavorite")
     public Result<Boolean> toFavorite(String navId) {
-        String userName = RpcContext.getContext().getAttachment("username");
+        UserDO userDO = UserSessionUtil.getCurreentUserByKey();
 
         return new Result<>();
     }

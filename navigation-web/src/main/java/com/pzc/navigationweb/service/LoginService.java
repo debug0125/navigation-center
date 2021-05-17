@@ -17,4 +17,11 @@ public interface LoginService {
      * @return
      */
     Result<UserDO> loginUser(LoginUser loginUser);
+
+    /**
+     * 登录
+     * @param loginUser
+     * @return
+     */
+    Result<UserDO> register(LoginUser loginUser);
 }

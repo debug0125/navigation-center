@@ -1,9 +1,8 @@
 package com.pzc.navigationweb.service.impl;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
-import com.pzc.navigationweb.common.util.CookieUtil;
-import com.pzc.navigationweb.common.util.PasswordUtil;
-import com.pzc.navigationweb.common.util.Result;
+import com.pzc.navigationweb.common.util.*;
+import com.pzc.navigationweb.constant.ImgConstants;
 import com.pzc.navigationweb.dao.UserDOMapper;
 import com.pzc.navigationweb.domain.dbdo.UserDO;
 import com.pzc.navigationweb.dto.reqdto.LoginUser;
@@ -35,7 +34,7 @@ public class LoginServiceImpl implements LoginService {
 
         String password = loginUser.getPassword();
         //验证密码
-        String saltPwd = PasswordUtil.decrypt(password,userDO.getSalt().getBytes());
+        String saltPwd = PasswordUtil.encrypt(password,userDO.getSalt().getBytes());
         if (!userDO.getPassword().equals(saltPwd)) {
             respDTOResult.setSuccess(false);
             respDTOResult.setErrMsg("密码错误，请重新输入");
@@ -45,5 +44,35 @@ public class LoginServiceImpl implements LoginService {
         respDTOResult.setSuccess(true);
         respDTOResult.setModule(userDO);
         return respDTOResult;
+    }
+
+    @Override
+    public Result<UserDO> register(LoginUser loginUser) {
+        Result<UserDO> result = new Result<>();
+        if (StringUtils.isNotEmpty(loginUser.getAccount()) && StringUtils.isNotEmpty(loginUser.getPassword())) {
+            if (loginUser.getPassword().equals(loginUser.getPasswordTwo())) {
+                String salt = ObjectId.get().toHexString().substring(0,8);
+                String saltPwd = PasswordUtil.encrypt(loginUser.getPassword(), salt.getBytes());
+                UserDO userDO = new UserDO();
+                InitDOUtil.initField(userDO);
+                userDO.setAccount(loginUser.getAccount());
+                userDO.setPassword(saltPwd);
+                userDO.setName(StringUtils.isNotEmpty(loginUser.getName())?loginUser.getName():"nav_"+ObjectId.get().toHexString().substring(10));
+                userDO.setAvatarUrl(StringUtils.isNotEmpty(loginUser.getAvatarUrl())?loginUser.getAvatarUrl(): ImgConstants.DEFAULT_PICTURE);
+                userDO.setSalt(salt);
+                userDOMapper.insert(userDO);
+                result.setSuccess(true);
+                result.setErrMsg("注册成功！");
+                return result;
+            } else {
+                result.setSuccess(false);
+                result.setErrMsg("两次密码输入请保持一致");
+                return result;
+            }
+        } else {
+            result.setSuccess(false);
+            result.setErrMsg("账号和密码都不能为空");
+            return result;
+        }
     }
 }

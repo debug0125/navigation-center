@@ -13,6 +13,7 @@ import com.pzc.navigationweb.service.LoginService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -41,13 +42,14 @@ public class UserLoginAspect {
     public void Pointcut(Login function) {
     }
 
-    @Before(value = "Pointcut(function)", argNames = "joinPoint,function")
-    public void deBefore(JoinPoint joinPoint, Login function) {
+    @Around(value = "Pointcut(function)", argNames = "joinPoint,function")
+    public Object deBefore(ProceedingJoinPoint joinPoint, Login function) throws Throwable {
         System.out.println("进入切面");
         LoginUser loginUser = (LoginUser) joinPoint.getArgs()[0];
 
         Result<UserDO> result = loginService.loginUser(loginUser);
         if (result.isSuccess()) {
+            result.setSuccess(false);
             HttpServletResponse httpResponse = (HttpServletResponse) joinPoint.getArgs()[1];
             String value = function.value();
             // 生成token
@@ -57,6 +59,9 @@ public class UserLoginAspect {
             UserSessionUtil.putCurrebtUser(userDO);
             // 存入cookie
             CookieUtil.saveCookie(userDO, httpResponse, value);
+            result.setSuccess(true);
         }
+        joinPoint.proceed();
+        return result;
     }
 }

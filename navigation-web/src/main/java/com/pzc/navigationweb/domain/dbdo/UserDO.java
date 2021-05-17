@@ -18,4 +18,9 @@ public class UserDO extends BaseDO {
     private String token;
 
     private String salt;
+
+    /**
+     * 头像
+     */
+    private String avatarUrl;
 }

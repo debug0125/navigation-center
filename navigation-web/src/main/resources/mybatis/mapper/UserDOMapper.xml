@@ -12,12 +12,12 @@
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="token" jdbcType="VARCHAR" property="token" />
     <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" />
   </resultMap>
   <sql id="Base_Column_List">
     id, create_date, create_name, modify_date, modify_name, version, is_del, account, 
-    name, password, token, salt
+    name, password, salt, avatar_url
   </sql>
 
   <sql id="selectTable">
@@ -65,12 +65,12 @@
     insert into user (id, create_date, create_name, 
       modify_date, modify_name, version, 
       is_del, account, name, 
-      password, token, salt
+      password, salt, avatar_url
       )
     values (#{id,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{createName,jdbcType=VARCHAR}, 
       #{modifyDate,jdbcType=TIMESTAMP}, #{modifyName,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, 
       #{isDel,jdbcType=TINYINT}, #{account,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}
+      #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.pzc.navigationweb.domain.dbdo.UserDO">
@@ -106,11 +106,11 @@
       <if test="password != null">
         password,
       </if>
-      <if test="token != null">
-        token,
-      </if>
       <if test="salt != null">
         salt,
+      </if>
+      <if test="avatarUrl != null">
+        avatar_url,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -144,11 +144,11 @@
       <if test="password != null">
         #{password,jdbcType=VARCHAR},
       </if>
-      <if test="token != null">
-        #{token,jdbcType=VARCHAR},
-      </if>
       <if test="salt != null">
         #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarUrl != null">
+        #{avatarUrl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -182,11 +182,11 @@
       <if test="password != null">
         password = #{password,jdbcType=VARCHAR},
       </if>
-      <if test="token != null">
-        token = #{token,jdbcType=VARCHAR},
-      </if>
       <if test="salt != null">
         salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarUrl != null">
+        avatar_url = #{salt,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -202,8 +202,8 @@
       account = #{account,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
-      token = #{token,jdbcType=VARCHAR},
-      salt = #{salt,jdbcType=VARCHAR}
+      salt = #{salt,jdbcType=VARCHAR},
+      avatar_url = #{avatarUrl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

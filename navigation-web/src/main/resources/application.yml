@@ -4,6 +4,10 @@ server:
     context-path: /navigation-web
 
 
+spring:
+  application:
+    name: navigation-web
+
 # 控制台打印sql
 logging:
   level:

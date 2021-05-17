@@ -1,10 +1,17 @@
 package com.pzc.navigationweb.controller;
 
+import com.alibaba.dubbo.common.utils.StringUtils;
 import com.pzc.navigationweb.aspect.annotation.Login;
+import com.pzc.navigationweb.common.util.InitDOUtil;
+import com.pzc.navigationweb.common.util.ObjectId;
+import com.pzc.navigationweb.common.util.PasswordUtil;
 import com.pzc.navigationweb.common.util.Result;
+import com.pzc.navigationweb.constant.ImgConstants;
 import com.pzc.navigationweb.constant.LoginTokenConstant;
+import com.pzc.navigationweb.dao.UserDOMapper;
 import com.pzc.navigationweb.domain.dbdo.UserDO;
 import com.pzc.navigationweb.dto.reqdto.LoginUser;
+import com.pzc.navigationweb.service.LoginService;
 import com.pzc.navigationweb.service.NavigationResourcesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +29,19 @@ public class LoginController extends BaseController {
     @Autowired
     private NavigationResourcesService navigationResourcesService;
 
+    @Autowired
+    private LoginService loginService;
+
     @Login(LoginTokenConstant.TOKEN_KEY)
     @RequestMapping("/login")
     public Result<UserDO> login(LoginUser loginUser, HttpServletResponse httpResponse) {
         return new Result<>();
     }
+
+    @RequestMapping("/register")
+    public Result<UserDO> register(LoginUser loginUser) {
+        Result<UserDO> result = loginService.register(loginUser);
+        return result;
+    }
+
 }

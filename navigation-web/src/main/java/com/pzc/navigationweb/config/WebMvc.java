@@ -16,11 +16,12 @@ import java.util.List;
 public class WebMvc implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        List<String> list = new ArrayList<>();
-//        list.add("/navigation/**");
-        list.add("/auth/**");
+        List<String> excludeList = new ArrayList<>();
+        excludeList.add("/register");
+        excludeList.add("/login");
         registry.addInterceptor(new Interceptor())
-                .addPathPatterns(list);
+                .addPathPatterns("/**")
+                .excludePathPatterns(excludeList);
 
     }
 }

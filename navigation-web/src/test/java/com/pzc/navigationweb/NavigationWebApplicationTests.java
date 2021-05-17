@@ -4,8 +4,10 @@ import com.github.pagehelper.PageInfo;
 import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO;
 import com.pzc.navigationweb.dto.query.NavigationQuery;
+import com.pzc.navigationweb.dto.reqdto.LoginUser;
 import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
 import com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO;
+import com.pzc.navigationweb.service.LoginService;
 import com.pzc.navigationweb.service.NavigationResourcesService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +23,8 @@ class NavigationWebApplicationTests {
 
     @Autowired
     private NavigationResourcesService navigationResourcesService;
+    @Autowired
+    private LoginService loginService;
 
     @Test
     void contextLoads() {
@@ -32,6 +36,17 @@ class NavigationWebApplicationTests {
         if (pageInfoResult.getModule() != null) {
             System.out.println(111);
         }
+
+    }
+
+    @Test
+    void register(){
+        LoginUser loginUser = new LoginUser();
+        loginUser.setAccount("ryf");
+        loginUser.setName("痞子橙");
+        loginUser.setPassword("123456");
+        loginUser.setPasswordTwo("123456");
+        loginService.register(loginUser);
 
     }
 

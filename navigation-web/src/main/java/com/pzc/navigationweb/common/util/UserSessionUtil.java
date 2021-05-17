@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
  */
 public class UserSessionUtil {
 
+    private static final String USER_INFO = "userInfo";
+
     /**
      * 得到session
      */
@@ -33,6 +35,12 @@ public class UserSessionUtil {
 //        RequestContext.get().put("userInfo", userInfoDTO);
     }
 
+    public static void putCurrebtUserBykey(UserDO userDO) {
+        HttpSession session = getSession();
+        session.setAttribute(UserSessionUtil.USER_INFO, userDO);
+//        RequestContext.get().put("userInfo", userInfoDTO);
+    }
+
     /**
      * 获取当前用户
      */
@@ -40,6 +48,14 @@ public class UserSessionUtil {
         HttpSession session = getSession();
         if (session != null) {
             return (UserDO) session.getAttribute(token);
+        }
+        return new UserDO();
+    }
+
+    public static UserDO getCurreentUserByKey() {
+        HttpSession session = getSession();
+        if (session != null) {
+            return (UserDO) session.getAttribute(UserSessionUtil.USER_INFO);
         }
         return new UserDO();
     }

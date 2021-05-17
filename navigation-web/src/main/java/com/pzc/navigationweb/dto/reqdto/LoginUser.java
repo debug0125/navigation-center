@@ -1,5 +1,6 @@
 package com.pzc.navigationweb.dto.reqdto;
 
+import com.alibaba.dubbo.common.utils.StringUtils;
 import com.pzc.navigationweb.dto.basedto.ReqDTO;
 import lombok.Data;
 
@@ -13,6 +14,12 @@ public class LoginUser extends ReqDTO {
     private String token;
 
     private String name;
+
+    /**
+     * 头像
+     */
+    private String avatarUrl;
+
     /**
      * 账号
      */
@@ -21,4 +28,20 @@ public class LoginUser extends ReqDTO {
      * 密码
      */
     private String password;
+    /**
+     * 第二次密码
+     */
+    private String passwordTwo;
+
+
+    public void validation() {
+        if (StringUtils.isBlank(account)) {
+            throw new IllegalArgumentException("账号不能为空！");
+        }
+
+        if (StringUtils.isBlank(password)) {
+            throw new IllegalArgumentException("密码不能为空！");
+        }
+
+    }
 }

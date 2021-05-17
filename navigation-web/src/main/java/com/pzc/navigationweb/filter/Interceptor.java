@@ -7,7 +7,6 @@ import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.common.util.UserSessionUtil;
 import com.pzc.navigationweb.constant.LoginTokenConstant;
 import com.pzc.navigationweb.constant.enumtype.UserErrorCodeEnum;
-import com.pzc.navigationweb.context.RequestContext;
 import com.pzc.navigationweb.domain.dbdo.UserDO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 
 /**
@@ -26,8 +24,7 @@ public class Interceptor implements HandlerInterceptor {
     private static final Logger log = LoggerFactory.getLogger(Interceptor.class);
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
         String token = CookieUtil.getCookie(request, LoginTokenConstant.TOKEN_KEY);
         UserDO userDO = UserSessionUtil.getCurreentUser(token);
         if (userDO == null) {
@@ -37,7 +34,7 @@ public class Interceptor implements HandlerInterceptor {
         }
 
         //用户信息 存入上下文
-        RequestContext.get().put("userInfo", userDO);
+        UserSessionUtil.putCurrebtUserBykey(userDO);
         return true;
     }
 
