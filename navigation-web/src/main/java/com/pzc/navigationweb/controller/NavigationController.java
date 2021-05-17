@@ -41,9 +41,10 @@ public class NavigationController extends BaseController {
     }
 
     @RequestMapping("/toFavorite")
-    public Result<Boolean> toFavorite(String navId) {
+    public Result<NavigationResourcesRespDTO> toFavorite(String navId, Boolean isLiked) {
         UserDO userDO = UserSessionUtil.getCurreentUserByKey();
-
-        return new Result<>();
+        Result<NavigationResourcesRespDTO> result =
+                navigationResourcesService.toFavorite(userDO.getId(),navId,isLiked);
+        return result;
     }
 }

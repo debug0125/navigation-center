@@ -8,7 +8,9 @@ import com.github.pagehelper.PageInfo;
 import com.pzc.navigationweb.common.util.InitDOUtil;
 import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.constant.ImgConstants;
+import com.pzc.navigationweb.dao.FavoritesDOMapper;
 import com.pzc.navigationweb.dao.NavigationResourcesDOMapper;
+import com.pzc.navigationweb.domain.dbdo.FavoritesDO;
 import com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO;
 import com.pzc.navigationweb.domain.mapstruct.NavigationReqToDo;
 import com.pzc.navigationweb.dto.query.NavigationQuery;
@@ -27,6 +29,8 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
 
     @Autowired
     private NavigationResourcesDOMapper navigationResourcesDOMapper;
+    @Autowired
+    private FavoritesDOMapper favoritesDOMapper;
 
     @Override
     public Result<Boolean> submit(NavigationResourcesReqDTO navigationResourcesReqDTO) {
@@ -72,6 +76,28 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
         NavigationResourcesRespDTO respDTO = NavigationReqToDo.INSTANCE.doToResp(resourcesDO);
         respDTO.setCreateDateStr(DateUtil.formatDateTime(respDTO.getCreateDate()));
         result.setModule(respDTO);
+        return result;
+    }
+
+    @Override
+    public Result<NavigationResourcesRespDTO> toFavorite(String userId, String navId, Boolean isLiked) {
+        Result<NavigationResourcesRespDTO> result = new Result<>();
+        NavigationResourcesDO resourcesDO = navigationResourcesDOMapper.selectByPrimaryKey(navId);
+        FavoritesDO favoritesDO = new FavoritesDO();
+        if (isLiked) {
+            // 已收藏 --> 取消收藏
+            favoritesDO = favoritesDOMapper.selectByUserNavId(userId,navId);
+            favoritesDOMapper.deleteByPrimaryKey(favoritesDO.getId());
+            resourcesDO.setLikeCount(resourcesDO.getLikeCount()-1);
+        } else {
+            InitDOUtil.initField(favoritesDO);
+            favoritesDO.setUserId(userId);
+            favoritesDO.setNavId(navId);
+            favoritesDOMapper.insert(favoritesDO);
+            resourcesDO.setLikeCount(resourcesDO.getLikeCount()+1);
+        }
+        result.setSuccess(true);
+        result.setModule(NavigationReqToDo.INSTANCE.doToResp(resourcesDO));
         return result;
     }
 }
