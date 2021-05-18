@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pzc.navigationweb.common.util.InitDOUtil;
 import com.pzc.navigationweb.common.util.Result;
+import com.pzc.navigationweb.common.util.UserSessionUtil;
 import com.pzc.navigationweb.constant.ImgConstants;
 import com.pzc.navigationweb.dao.FavoritesDOMapper;
 import com.pzc.navigationweb.dao.NavigationResourcesDOMapper;
@@ -73,8 +74,11 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
         resourcesDO.setOpenCount(resourcesDO.getOpenCount()+1);
         result.setSuccess(navigationResourcesDOMapper.updateByPrimaryKey(resourcesDO) > 0);
 
+
         NavigationResourcesRespDTO respDTO = NavigationReqToDo.INSTANCE.doToResp(resourcesDO);
+        respDTO.setIsLiked(favoritesDOMapper.selectByUserNavId(UserSessionUtil.getCurreentUserByKey().getId(),id) != null);
         respDTO.setCreateDateStr(DateUtil.formatDateTime(respDTO.getCreateDate()));
+        respDTO.setLikeCount(favoritesDOMapper.countByNavId(id));
         result.setModule(respDTO);
         return result;
     }
@@ -83,6 +87,8 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
     public Result<NavigationResourcesRespDTO> toFavorite(String userId, String navId, Boolean isLiked) {
         Result<NavigationResourcesRespDTO> result = new Result<>();
         NavigationResourcesDO resourcesDO = navigationResourcesDOMapper.selectByPrimaryKey(navId);
+
+
         FavoritesDO favoritesDO = new FavoritesDO();
         if (isLiked) {
             // 已收藏 --> 取消收藏
@@ -96,8 +102,12 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
             favoritesDOMapper.insert(favoritesDO);
             resourcesDO.setLikeCount(resourcesDO.getLikeCount()+1);
         }
+        navigationResourcesDOMapper.updateByPrimaryKey(resourcesDO);
+
+        NavigationResourcesRespDTO respDTO = NavigationReqToDo.INSTANCE.doToResp(resourcesDO);
+        respDTO.setIsLiked(!isLiked);
         result.setSuccess(true);
-        result.setModule(NavigationReqToDo.INSTANCE.doToResp(resourcesDO));
+        result.setModule(respDTO);
         return result;
     }
 }

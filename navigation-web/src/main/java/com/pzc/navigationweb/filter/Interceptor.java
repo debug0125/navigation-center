@@ -29,7 +29,7 @@ public class Interceptor implements HandlerInterceptor {
         UserDO userDO = UserSessionUtil.getCurreentUser(token);
         if (userDO == null) {
             //若为空则返回登录界面
-            failRequest(UserErrorCodeEnum.REQUEST_TOKEN.getErrCode(), UserErrorCodeEnum.REQUEST_TOKEN.getErrCode(), response);
+            failRequest(UserErrorCodeEnum.REQUEST_TOKEN.getErrCode(), UserErrorCodeEnum.REQUEST_TOKEN.getErrMsg(), response);
             return false;
         }
 

@@ -27,4 +27,9 @@ public class NavigationResourcesRespDTO extends ReqDTO {
     private Integer openCount;
 
     private Integer likeCount;
+
+    /**
+     * 是否已收藏
+     */
+    private Boolean isLiked;
 }
