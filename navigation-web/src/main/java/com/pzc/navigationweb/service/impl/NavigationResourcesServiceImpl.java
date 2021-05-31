@@ -37,7 +37,7 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
     public Result<Boolean> submit(NavigationResourcesReqDTO navigationResourcesReqDTO) {
         Result<Boolean> result = new Result<>();
         // 设置默认值
-        if (StringUtils.isNotEmpty(navigationResourcesReqDTO.getLogoUrl())) {
+        if (StringUtils.isEmpty(navigationResourcesReqDTO.getLogoUrl())) {
             navigationResourcesReqDTO.setLogoUrl(ImgConstants.DEFAULT_PICTURE);
         }
         NavigationResourcesDO navigationResourcesDO = NavigationReqToDo.INSTANCE.reqToDo(navigationResourcesReqDTO);
