@@ -67,6 +67,9 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
         PageInfo<NavigationResourcesRespDTO> pageInfo = new PageInfo<>(page);
         pageInfo.getList().stream().forEach(x -> {
             x.setCreateDateStr(DateUtil.formatDateTime(x.getCreateDate()));
+            FavoritesDO favoritesDO = favoritesDOMapper.selectByUserNavId(UserSessionUtil.getCurreentUserByKey().getId(),x.getId());
+            x.setIsLiked( favoritesDO != null);
+            x.setLikeCount(favoritesDOMapper.countByNavId(x.getId()));
         });
         result.setModule(pageInfo);
         result.setSuccess(true);
@@ -99,7 +102,7 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
         if (isLiked) {
             // 已收藏 --> 取消收藏
             favoritesDO = favoritesDOMapper.selectByUserNavId(userId,navId);
-            favoritesDOMapper.deleteByPrimaryKey(favoritesDO.getId());
+            favoritesDOMapper.removeByPrimaryKey(favoritesDO.getId());
             resourcesDO.setLikeCount(resourcesDO.getLikeCount()-1);
         } else {
             InitDOUtil.initField(favoritesDO);
