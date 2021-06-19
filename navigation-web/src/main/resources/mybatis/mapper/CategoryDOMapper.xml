@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pzc.navigationweb.dao.CategoryDOMapper">
+  <resultMap id="BaseResultMap" type="com.pzc.navigationweb.domain.dbdo.CategoryDO">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="modify_date" jdbcType="TIMESTAMP" property="modifyDate" />
+    <result column="modify_name" jdbcType="VARCHAR" property="modifyName" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="is_del" jdbcType="TINYINT" property="isDel" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="father_id" jdbcType="VARCHAR" property="fatherId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, create_date, create_name, modify_date, modify_name, version, is_del, category_name, 
+    father_id
+  </sql>
+
+
+  <select id="getCategoryList" resultType="com.pzc.navigationweb.domain.dbdo.CategoryDO">
+    select
+    <include refid="Base_Column_List"/>
+    from category
+    where is_del = 0
+    <if test="fatherId != null and fatherId != ''">
+      and father_id = #{fatherId}
+    </if>
+  </select>
+
+
+
+
+
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from category
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from category
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.pzc.navigationweb.domain.dbdo.CategoryDO">
+    insert into category (id, create_date, create_name, 
+      modify_date, modify_name, version, 
+      is_del, category_name, father_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{createName,jdbcType=VARCHAR}, 
+      #{modifyDate,jdbcType=TIMESTAMP}, #{modifyName,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, 
+      #{isDel,jdbcType=TINYINT}, #{categoryName,jdbcType=VARCHAR}, #{fatherId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pzc.navigationweb.domain.dbdo.CategoryDO">
+    insert into category
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="createName != null">
+        create_name,
+      </if>
+      <if test="modifyDate != null">
+        modify_date,
+      </if>
+      <if test="modifyName != null">
+        modify_name,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="categoryName != null">
+        category_name,
+      </if>
+      <if test="fatherId != null">
+        father_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createName != null">
+        #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null">
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyName != null">
+        #{modifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="categoryName != null">
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="fatherId != null">
+        #{fatherId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pzc.navigationweb.domain.dbdo.CategoryDO">
+    update category
+    <set>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createName != null">
+        create_name = #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null">
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyName != null">
+        modify_name = #{modifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="categoryName != null">
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="fatherId != null">
+        father_id = #{fatherId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pzc.navigationweb.domain.dbdo.CategoryDO">
+    update category
+    set create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_name = #{createName,jdbcType=VARCHAR},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      modify_name = #{modifyName,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER},
+      is_del = #{isDel,jdbcType=TINYINT},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      father_id = #{fatherId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
