@@ -23,9 +23,7 @@
     <include refid="Base_Column_List"/>
     from category
     where is_del = 0
-    <if test="fatherId != null and fatherId != ''">
-      and father_id = #{fatherId}
-    </if>
+    and father_id = #{fatherId}
   </select>
 
 

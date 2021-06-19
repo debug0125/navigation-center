@@ -25,5 +25,5 @@ public class CategoryRespDTO extends ReqDTO {
     /**
      * 子类
      */
-    private List<CategoryRespDTO> categoryList;
+    private List<CategoryRespDTO> children;
 }

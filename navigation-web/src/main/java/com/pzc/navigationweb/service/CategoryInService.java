@@ -15,5 +15,5 @@ import java.util.List;
  */
 public interface CategoryInService {
 
-    List<CategoryRespDTO> getCategoryList();
+    Result<List<CategoryRespDTO>> getCategoryList();
 }
