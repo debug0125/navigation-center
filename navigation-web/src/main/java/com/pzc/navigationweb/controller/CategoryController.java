@@ -5,6 +5,7 @@ import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.common.util.UserSessionUtil;
 import com.pzc.navigationweb.domain.dbdo.UserDO;
 import com.pzc.navigationweb.dto.query.NavigationQuery;
+import com.pzc.navigationweb.dto.reqdto.CategoryReqDTO;
 import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
 import com.pzc.navigationweb.dto.respdto.CategoryRespDTO;
 import com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO;
@@ -31,5 +32,15 @@ public class CategoryController extends BaseController {
     @RequestMapping("/getCategoryList")
     public Result<List<CategoryRespDTO>> getCategoryList() {
         return categoryInService.getCategoryList();
+    }
+
+    @RequestMapping("/addCategory")
+    public Result<CategoryRespDTO> addCategory(CategoryReqDTO categoryReqDTO) {
+        return categoryInService.addCategory(categoryReqDTO);
+    }
+
+    @RequestMapping("/removeCategory")
+    public Result<Boolean> removeCategory(CategoryReqDTO categoryReqDTO) {
+        return categoryInService.removeCategory(categoryReqDTO);
     }
 }

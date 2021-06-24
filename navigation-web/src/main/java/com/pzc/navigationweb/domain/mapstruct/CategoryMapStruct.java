@@ -2,6 +2,7 @@ package com.pzc.navigationweb.domain.mapstruct;
 
 import com.pzc.navigationweb.domain.dbdo.CategoryDO;
 import com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO;
+import com.pzc.navigationweb.dto.reqdto.CategoryReqDTO;
 import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
 import com.pzc.navigationweb.dto.respdto.CategoryRespDTO;
 import com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO;
@@ -22,5 +23,7 @@ public interface CategoryMapStruct {
             Mappers.getMapper(CategoryMapStruct.class);
 
 
-    List<CategoryRespDTO> reqToDo(List<CategoryDO> doList);
+    List<CategoryRespDTO> doListToRespList(List<CategoryDO> doList);
+
+    CategoryDO reqToDo(CategoryReqDTO reqDTO);
 }

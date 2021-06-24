@@ -92,6 +92,7 @@ public final class ObjectId implements Comparable<ObjectId>, Serializable {
         }
     }
 
+    @Override
     public int compareTo(ObjectId id) {
         if (id == null) {
             return -1;
