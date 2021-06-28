@@ -3,6 +3,8 @@ package com.pzc.navigationweb.dto.reqdto;
 import com.pzc.navigationweb.dto.basedto.ReqDTO;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author ryf
  * @date 5/11/21 2:46 PM
@@ -21,4 +23,6 @@ public class NavigationResourcesReqDTO extends ReqDTO {
     private String detail;
 
     private String type;
+
+    private List<String> categoryIds;
 }

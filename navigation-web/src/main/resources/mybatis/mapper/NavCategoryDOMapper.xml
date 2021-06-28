@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pzc.navigationweb.dao.NavCategoryDOMapper">
+  <resultMap id="BaseResultMap" type="com.pzc.navigationweb.domain.dbdo.NavCategoryDO">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="modify_date" jdbcType="TIMESTAMP" property="modifyDate" />
+    <result column="modify_name" jdbcType="VARCHAR" property="modifyName" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="is_del" jdbcType="TINYINT" property="isDel" />
+    <result column="category_id" jdbcType="VARCHAR" property="categoryId" />
+    <result column="nav_id" jdbcType="VARCHAR" property="navId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, create_date, create_name, modify_date, modify_name, version, is_del, category_id, 
+    nav_id
+  </sql>
+
+  <sql id="selectByCondition">
+    select
+    <include refid="Base_Column_List"/>
+    from nav_category
+    where is_del = 0
+    <if test="categoryId != null and categoryId != ''">
+      and category_id = #{categoryId}
+    </if>
+    <if test="navId != null and navId != ''">
+      and nav_id = #{navId}
+    </if>
+  </sql>
+
+
+  <select id="queryListByCategoryId" resultType="com.pzc.navigationweb.domain.dbdo.NavCategoryDO"
+          parameterType="com.pzc.navigationweb.domain.dbdo.NavCategoryDO">
+    <include refid="selectByCondition"/>
+  </select>
+
+
+
+
+
+
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from nav_category
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from nav_category
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.pzc.navigationweb.domain.dbdo.NavCategoryDO">
+    insert into nav_category (id, create_date, create_name, 
+      modify_date, modify_name, version, 
+      is_del, category_id, nav_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{createName,jdbcType=VARCHAR}, 
+      #{modifyDate,jdbcType=TIMESTAMP}, #{modifyName,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, 
+      #{isDel,jdbcType=TINYINT}, #{categoryId,jdbcType=VARCHAR}, #{navId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pzc.navigationweb.domain.dbdo.NavCategoryDO">
+    insert into nav_category
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="createName != null">
+        create_name,
+      </if>
+      <if test="modifyDate != null">
+        modify_date,
+      </if>
+      <if test="modifyName != null">
+        modify_name,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="categoryId != null">
+        category_id,
+      </if>
+      <if test="navId != null">
+        nav_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createName != null">
+        #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null">
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyName != null">
+        #{modifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="navId != null">
+        #{navId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pzc.navigationweb.domain.dbdo.NavCategoryDO">
+    update nav_category
+    <set>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createName != null">
+        create_name = #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null">
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyName != null">
+        modify_name = #{modifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="navId != null">
+        nav_id = #{navId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pzc.navigationweb.domain.dbdo.NavCategoryDO">
+    update nav_category
+    set create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_name = #{createName,jdbcType=VARCHAR},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      modify_name = #{modifyName,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER},
+      is_del = #{isDel,jdbcType=TINYINT},
+      category_id = #{categoryId,jdbcType=VARCHAR},
+      nav_id = #{navId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

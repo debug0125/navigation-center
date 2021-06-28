@@ -3,6 +3,8 @@ package com.pzc.navigationweb.dto.respdto;
 import com.pzc.navigationweb.dto.basedto.ReqDTO;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author ryf
  * @date 5/11/21 2:46 PM
@@ -32,4 +34,9 @@ public class NavigationResourcesRespDTO extends ReqDTO {
      * 是否已收藏
      */
     private Boolean isLiked;
+
+    /**
+     * 标记集合
+     */
+    List<CategoryRespDTO> categoryRespDTOList;
 }
