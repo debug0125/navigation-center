@@ -39,12 +39,4 @@ public class NavigationController extends BaseController {
     public Result<NavigationResourcesRespDTO> addOpenCount(String id) {
         return navigationResourcesService.addOpenCount(id);
     }
-
-    @RequestMapping("/toFavorite")
-    public Result<NavigationResourcesRespDTO> toFavorite(String navId, Boolean isLiked) {
-        UserDO userDO = UserSessionUtil.getCurreentUserByKey();
-        Result<NavigationResourcesRespDTO> result =
-                navigationResourcesService.toFavorite(userDO.getId(),navId,isLiked);
-        return result;
-    }
 }

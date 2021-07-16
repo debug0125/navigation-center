@@ -8,4 +8,5 @@
     <bean id="navigationResourcesService" class="com.pzc.navigationweb.service.impl.NavigationResourcesServiceImpl"/>
     <bean id="loginService" class="com.pzc.navigationweb.service.impl.LoginServiceImpl"/>
     <bean id="categoryInService" class="com.pzc.navigationweb.service.impl.CategoryInServiceImpl"/>
+    <bean id="favoriteInService" class="com.pzc.navigationweb.service.impl.FavoriteInServiceImpl"/>
 </beans>

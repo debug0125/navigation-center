@@ -1,64 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pzc.navigationweb.dao.FavoritesDOMapper">
-  <resultMap id="BaseResultMap" type="com.pzc.navigationweb.domain.dbdo.FavoritesDO">
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
-    <result column="create_name" jdbcType="VARCHAR" property="createName" />
-    <result column="modify_date" jdbcType="TIMESTAMP" property="modifyDate" />
-    <result column="modify_name" jdbcType="VARCHAR" property="modifyName" />
-    <result column="version" jdbcType="INTEGER" property="version" />
-    <result column="is_del" jdbcType="TINYINT" property="isDel" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
-    <result column="nav_id" jdbcType="VARCHAR" property="navId" />
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.pzc.navigationweb.domain.dbdo.FavoritesDO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="modify_date" jdbcType="TIMESTAMP" property="modifyDate"/>
+        <result column="modify_name" jdbcType="VARCHAR" property="modifyName"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="is_del" jdbcType="TINYINT" property="isDel"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="nav_id" jdbcType="VARCHAR" property="navId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, create_date, create_name, modify_date, modify_name, version, is_del, user_id, 
     nav_id
   </sql>
 
-  <sql id="selectTable">
-    select <include refid="Base_Column_List"/>
-    from favorites
-  </sql>
+    <sql id="selectTable">
+        select
+        <include refid="Base_Column_List"/>
+        from favorites
+    </sql>
+
+    <sql id="leftJoinNC">
+        <if test="categoryIds != null and categoryIds.size() > 0">
+            left join nav_category nc
+            on f.nav_id = nc.nav_id
+        </if>
+    </sql>
+    <sql id="conditionJoin">
+        where f.is_del = 0 and f.user_id = #{userId}
+        <if test="categoryIds != null and categoryIds.size() > 0">
+            and nc.category_id in
+            <foreach collection="categoryIds" item="categoryId" open="(" separator="," close=")">
+                #{categoryId}
+            </foreach>
+        </if>
+    </sql>
+
+    <select id="countByUserAndCategory" resultType="java.lang.Integer">
+        select count(1) from favorites f
+        <include refid="leftJoinNC"/>
+        <include refid="conditionJoin"/>
+    </select>
+
+    <select id="listByUserAndCategory" resultType="com.pzc.navigationweb.domain.dbdo.FavoritesDO">
+        select f.* from favorites f
+        <include refid="leftJoinNC"/>
+        <include refid="conditionJoin"/>
+        limit #{offset},#{limit}
+    </select>
 
 
-  <select id="selectByUserNavId" resultType="com.pzc.navigationweb.domain.dbdo.FavoritesDO">
-    <include refid="selectTable"/>
-    where user_id = #{userId} and nav_id = #{navId} and is_del = 0
-  </select>
+    <select id="selectByUserNavId" resultType="com.pzc.navigationweb.domain.dbdo.FavoritesDO">
+        <include refid="selectTable"/>
+        where user_id = #{userId} and nav_id = #{navId} and is_del = 0
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from favorites
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
 
 
-
-
-
-
-
-
-
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from favorites
-    where id = #{id,jdbcType=VARCHAR}
-  </select>
-
-
-  <select id="countByNavId" resultType="java.lang.Integer">
+    <select id="countByNavId" resultType="java.lang.Integer">
     select count(1) from favorites where nav_id = #{navId} and is_del = 0
   </select>
 
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from favorites
     where id = #{id,jdbcType=VARCHAR}
   </delete>
 
-  <update id="removeByPrimaryKey" parameterType="java.lang.String">
+    <update id="removeByPrimaryKey" parameterType="java.lang.String">
     update favorites set is_del = 1
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <insert id="insert" parameterType="com.pzc.navigationweb.domain.dbdo.FavoritesDO">
+    <insert id="insert" parameterType="com.pzc.navigationweb.domain.dbdo.FavoritesDO">
     insert into favorites (id, create_date, create_name, 
       modify_date, modify_name, version, 
       is_del, user_id, nav_id
@@ -68,98 +90,98 @@
       #{isDel,jdbcType=TINYINT}, #{userId,jdbcType=VARCHAR}, #{navId,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.pzc.navigationweb.domain.dbdo.FavoritesDO">
-    insert into favorites
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="createDate != null">
-        create_date,
-      </if>
-      <if test="createName != null">
-        create_name,
-      </if>
-      <if test="modifyDate != null">
-        modify_date,
-      </if>
-      <if test="modifyName != null">
-        modify_name,
-      </if>
-      <if test="version != null">
-        version,
-      </if>
-      <if test="isDel != null">
-        is_del,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="navId != null">
-        nav_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="createDate != null">
-        #{createDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createName != null">
-        #{createName,jdbcType=VARCHAR},
-      </if>
-      <if test="modifyDate != null">
-        #{modifyDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyName != null">
-        #{modifyName,jdbcType=VARCHAR},
-      </if>
-      <if test="version != null">
-        #{version,jdbcType=INTEGER},
-      </if>
-      <if test="isDel != null">
-        #{isDel,jdbcType=TINYINT},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="navId != null">
-        #{navId,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.pzc.navigationweb.domain.dbdo.FavoritesDO">
-    update favorites
-    <set>
-      <if test="createDate != null">
-        create_date = #{createDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createName != null">
-        create_name = #{createName,jdbcType=VARCHAR},
-      </if>
-      <if test="modifyDate != null">
-        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyName != null">
-        modify_name = #{modifyName,jdbcType=VARCHAR},
-      </if>
-      <if test="version != null">
-        version = #{version,jdbcType=INTEGER},
-      </if>
-      <if test="isDel != null">
-        is_del = #{isDel,jdbcType=TINYINT},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="navId != null">
-        nav_id = #{navId,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.pzc.navigationweb.domain.dbdo.FavoritesDO">
+    <insert id="insertSelective" parameterType="com.pzc.navigationweb.domain.dbdo.FavoritesDO">
+        insert into favorites
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="createName != null">
+                create_name,
+            </if>
+            <if test="modifyDate != null">
+                modify_date,
+            </if>
+            <if test="modifyName != null">
+                modify_name,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+            <if test="isDel != null">
+                is_del,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="navId != null">
+                nav_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createName != null">
+                #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="modifyDate != null">
+                #{modifyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyName != null">
+                #{modifyName,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
+            <if test="isDel != null">
+                #{isDel,jdbcType=TINYINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="navId != null">
+                #{navId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.pzc.navigationweb.domain.dbdo.FavoritesDO">
+        update favorites
+        <set>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createName != null">
+                create_name = #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="modifyDate != null">
+                modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyName != null">
+                modify_name = #{modifyName,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                version = #{version,jdbcType=INTEGER},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel,jdbcType=TINYINT},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="navId != null">
+                nav_id = #{navId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.pzc.navigationweb.domain.dbdo.FavoritesDO">
     update favorites
     set create_date = #{createDate,jdbcType=TIMESTAMP},
       create_name = #{createName,jdbcType=VARCHAR},

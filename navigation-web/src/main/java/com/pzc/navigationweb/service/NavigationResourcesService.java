@@ -32,12 +32,4 @@ public interface NavigationResourcesService {
      * @return
      */
     Result<NavigationResourcesRespDTO> addOpenCount(String id);
-
-    /**
-     * 收藏/取消收藏
-     * @param userId
-     * @param navId
-     * @return
-     */
-    Result<NavigationResourcesRespDTO> toFavorite(String userId, String navId, Boolean isLiked);
 }

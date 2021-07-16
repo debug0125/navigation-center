@@ -1,9 +1,15 @@
 package com.pzc.navigationweb.dao;
 
 import com.pzc.navigationweb.domain.dbdo.FavoritesDO;
+import com.pzc.navigationweb.dto.query.FavoriteQuery;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface FavoritesDOMapper {
+
+    Integer countByUserAndCategory(FavoriteQuery query);
+    List<FavoritesDO> listByUserAndCategory(FavoriteQuery query);
 
     FavoritesDO selectByUserNavId(@Param("userId") String userId, @Param("navId") String navId);
 

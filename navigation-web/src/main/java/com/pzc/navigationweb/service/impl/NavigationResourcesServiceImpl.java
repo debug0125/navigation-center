@@ -133,38 +133,17 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
         return result;
     }
 
-    @Override
-    public Result<NavigationResourcesRespDTO> toFavorite(String userId, String navId, Boolean isLiked) {
-        Result<NavigationResourcesRespDTO> result = new Result<>();
-        NavigationResourcesDO resourcesDO = navigationResourcesDOMapper.selectByPrimaryKey(navId);
-
-
-        FavoritesDO favoritesDO = new FavoritesDO();
-        if (isLiked) {
-            // 已收藏 --> 取消收藏
-            favoritesDO = favoritesDOMapper.selectByUserNavId(userId,navId);
-            favoritesDOMapper.removeByPrimaryKey(favoritesDO.getId());
-            resourcesDO.setLikeCount(resourcesDO.getLikeCount()-1);
-        } else {
-            InitDOUtil.initField(favoritesDO);
-            favoritesDO.setUserId(userId);
-            favoritesDO.setNavId(navId);
-            favoritesDOMapper.insert(favoritesDO);
-            resourcesDO.setLikeCount(resourcesDO.getLikeCount()+1);
-        }
-        navigationResourcesDOMapper.updateByPrimaryKey(resourcesDO);
-
-        NavigationResourcesRespDTO respDTO = NavigationReqToDo.INSTANCE.doToResp(resourcesDO);
-        respDTO.setIsLiked(!isLiked);
-        result.setSuccess(true);
-        result.setModule(respDTO);
-        return result;
-    }
-
     public static void main(String[] args) throws UnknownHostException, SocketException {
-        InetAddress ia = InetAddress.getLocalHost();
-        System.out.println(ia);
-        getLocalMac(ia);
+        Integer a = 1;
+        Integer b = 2;
+        a = a ^ b;
+        b = a ^ b;
+        a = a ^ b;
+        System.out.println("a ->>" + a);
+        System.out.println("b ->>" + b);
+//        InetAddress ia = InetAddress.getLocalHost();
+//        System.out.println(ia);
+//        getLocalMac(ia);
     }
 
     private static void getLocalMac(InetAddress ia) throws SocketException {
