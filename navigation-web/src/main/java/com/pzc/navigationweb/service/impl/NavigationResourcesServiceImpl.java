@@ -21,20 +21,20 @@ import com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO;
 import com.pzc.navigationweb.domain.mapstruct.CategoryMapStruct;
 import com.pzc.navigationweb.domain.mapstruct.NavigationReqToDo;
 import com.pzc.navigationweb.dto.query.NavigationQuery;
+import com.pzc.navigationweb.dto.reqdto.AddNavOpenCountReqDTO;
 import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
-import com.pzc.navigationweb.dto.respdto.CategoryRespDTO;
 import com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO;
 import com.pzc.navigationweb.service.NavigationResourcesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author ryf
@@ -53,21 +53,16 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
 
 
     @Override
-    public Result<Boolean> submit(NavigationResourcesReqDTO navigationResourcesReqDTO) {
-        Result<Boolean> result = new Result<>();
-
-        if(CollectionUtils.isEmpty(navigationResourcesReqDTO.getCategoryIds())) {
-            result.setSuccess(false);
-            result.setErrMsg("标签不能为空");
-            return result;
-        }
+    @Transactional
+    public Boolean submit(NavigationResourcesReqDTO navigationResourcesReqDTO) {
+        AtomicBoolean result = new AtomicBoolean(false);
         // 设置默认值
         if (StringUtils.isEmpty(navigationResourcesReqDTO.getLogoUrl())) {
             navigationResourcesReqDTO.setLogoUrl(ImgConstants.DEFAULT_PICTURE);
         }
         NavigationResourcesDO navigationResourcesDO = NavigationReqToDo.INSTANCE.reqToDo(navigationResourcesReqDTO);
         InitDOUtil.initField(navigationResourcesDO);
-        result.setModule(navigationResourcesDOMapper.insertSelective(navigationResourcesDO) > 0);
+        result.set(navigationResourcesDOMapper.insertSelective(navigationResourcesDO) > 0);
 
         // 新增标签
         navigationResourcesReqDTO.getCategoryIds().stream().forEach(x -> {
@@ -75,20 +70,13 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
             InitDOUtil.initField(navCategoryDO);
             navCategoryDO.setNavId(navigationResourcesDO.getId());
             navCategoryDO.setCategoryId(x);
-            navCategoryDOMapper.insertSelective(navCategoryDO);
+            result.set(navCategoryDOMapper.insertSelective(navCategoryDO) > 0);
         });
-        if (result.getModule()) {
-            result.setSuccess(true);
-        } else {
-            result.setSuccess(false);
-            result.setErrMsg("推荐失败");
-        }
-        return result;
+        return result.get();
     }
 
     @Override
-    public Result<PageInfo<NavigationResourcesRespDTO>> pageNavigation(NavigationQuery query) {
-        Result<PageInfo<NavigationResourcesRespDTO>> result = new Result<>();
+    public PageInfo<NavigationResourcesRespDTO> pageNavigation(NavigationQuery query) {
         Page<NavigationResourcesRespDTO> page = PageHelper.startPage(query.getPageNo(), query.getPageSize(), true);
         navigationResourcesDOMapper.listNavigation(query);
         PageInfo<NavigationResourcesRespDTO> pageInfo = new PageInfo<>(page);
@@ -112,25 +100,22 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
             }
 
         });
-        result.setModule(pageInfo);
-        result.setSuccess(true);
-        return result;
+        return pageInfo;
     }
 
     @Override
-    public Result<NavigationResourcesRespDTO> addOpenCount(String id) {
-        Result<NavigationResourcesRespDTO> result = new Result<>();
+    public NavigationResourcesRespDTO addOpenCount(AddNavOpenCountReqDTO reqDTO) {
+        String id = reqDTO.getId();
         NavigationResourcesDO resourcesDO = navigationResourcesDOMapper.selectByPrimaryKey(id);
         resourcesDO.setOpenCount(resourcesDO.getOpenCount()+1);
-        result.setSuccess(navigationResourcesDOMapper.updateByPrimaryKey(resourcesDO) > 0);
+        navigationResourcesDOMapper.updateByPrimaryKey(resourcesDO);
 
 
         NavigationResourcesRespDTO respDTO = NavigationReqToDo.INSTANCE.doToResp(resourcesDO);
         respDTO.setIsLiked(favoritesDOMapper.selectByUserNavId(UserSessionUtil.getCurreentUserByKey().getId(),id) != null);
         respDTO.setCreateDateStr(DateUtil.formatDateTime(respDTO.getCreateDate()));
         respDTO.setLikeCount(favoritesDOMapper.countByNavId(id));
-        result.setModule(respDTO);
-        return result;
+        return respDTO;
     }
 
     public static void main(String[] args) throws UnknownHostException, SocketException {

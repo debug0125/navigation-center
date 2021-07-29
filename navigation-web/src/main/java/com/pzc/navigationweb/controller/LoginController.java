@@ -1,14 +1,8 @@
 package com.pzc.navigationweb.controller;
 
-import com.alibaba.dubbo.common.utils.StringUtils;
 import com.pzc.navigationweb.aspect.annotation.Login;
-import com.pzc.navigationweb.common.util.InitDOUtil;
-import com.pzc.navigationweb.common.util.ObjectId;
-import com.pzc.navigationweb.common.util.PasswordUtil;
 import com.pzc.navigationweb.common.util.Result;
-import com.pzc.navigationweb.constant.ImgConstants;
 import com.pzc.navigationweb.constant.LoginTokenConstant;
-import com.pzc.navigationweb.dao.UserDOMapper;
 import com.pzc.navigationweb.domain.dbdo.UserDO;
 import com.pzc.navigationweb.dto.reqdto.LoginUser;
 import com.pzc.navigationweb.service.LoginService;

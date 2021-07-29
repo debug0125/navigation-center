@@ -15,5 +15,6 @@ public class Result<T>  implements Serializable {
     private T module;
     private String errCode;
     private String errMsg;
-    private boolean success = true;
+    private boolean success;
+    private String successMsg;
 }

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="info" monitorInterval="0">
+    <Properties>
+        <!--  日志路径参数，这里所有项目统一变量log.path -->
+        <Property name="LOG_HOME">/Users/orange_r/myProject/navigation-center/navigation-web/log</Property>
+        <!-- 这两个参数根据项目改 -->
+        <Property name="PROJECT_NAME">navigation-web</Property>
+        <Property name="PROJECT_NAME_CAMEL">navigationWeb</Property>
+        <!-- mybatis level, 这里自定义配置是为了方便sit dev的调试。 dev sit: debug, 线上: error -->
+<!--        <Property name="SQL_LOG_LEVEL">${sys:sql.log.level}</Property>-->
+        <!-- mybatis mapper path -->
+        <Property name="MYBATIS_MAPPER_PATH">com.pzc.navigationweb.dao</Property>
+    </Properties>
+
+    <!--     先定义所有的appender -->
+    <appenders>
+        <!--#############################################################################################################-->
+        <!--#############################################################################################################-->
+        <!--                              这里是公共日志模块，所有微服务都要包含这些日志,所以不要动                                 -->
+        <!--#############################################################################################################-->
+        <!--#############################################################################################################-->
+        <!-- 控制台输出 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--             控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--             这个都知道是输出日志的格式 -->
+            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+        </Console>
+        <!-- process日志输出 -->
+        <RollingFile name="processLog" fileName="${LOG_HOME}/process.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/process-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <SizeBasedTriggeringPolicy size="100MB"/>
+        </RollingFile>
+        <!-- 项目日志目录，名称根据模块命名 -->
+        <RollingFile name="${PROJECT_NAME_CAMEL}Log" fileName="${LOG_HOME}/${PROJECT_NAME}.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/${PROJECT_NAME}-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <SizeBasedTriggeringPolicy size="100MB"/>
+        </RollingFile>
+        <!-- mybatis日志 -->
+        <RollingFile name="mybatis" fileName="${LOG_HOME}/mybatis.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/mybatis-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <SizeBasedTriggeringPolicy size="100MB"/>
+        </RollingFile>
+
+
+        <!--#############################################################################################################-->
+        <!--#############################################################################################################-->
+        <!-- 自定义日志模块放到下面，比如某个批量任务之类的                                                                       -->
+        <!--#############################################################################################################-->
+        <!--#############################################################################################################-->
+
+
+
+    </appenders>
+
+    <!--     然后定义logger，只有定义了logger并引入的appender，appender才会生效 -->
+    <loggers>
+        <!-- 公共配置  -->
+        <root level="DEBUG">
+            <appender-ref ref="Console"/>
+        </root>
+        <logger name="${PROJECT_NAME_CAMEL}Log" level="debug" additivity="false">
+            <AppenderRef ref="${PROJECT_NAME_CAMEL}Log"/>
+        </logger>
+        <logger name="process" level="debug" additivity="false">
+            <AppenderRef ref="processLog"/>
+        </logger>
+        <!-- mybatis配置 -->
+        <logger name="${MYBATIS_MAPPER_PATH}" level="debug" additivity="false">
+            <AppenderRef ref="mybatis"/>
+        </logger>
+
+        <!--其他额外自定义配置-->
+
+    </loggers>
+</configuration>

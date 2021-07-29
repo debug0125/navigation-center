@@ -4,7 +4,7 @@ package com.pzc.navigationweb.dto.basedto;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class PageDTO implements Serializable {
+public class PageDTO extends ReqDTO implements Serializable {
 
     private Integer pageSize;
     private Integer pageNo;
@@ -36,6 +36,7 @@ public class PageDTO implements Serializable {
         return this.pageNo != null && this.pageSize != null ? (this.pageNo - 1) * this.pageSize : null;
     }
 
+    @Override
     public void validation() {
         if (Objects.isNull(this.pageSize)) {
             throw new IllegalArgumentException("分页大小不能为空");

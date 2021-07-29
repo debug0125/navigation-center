@@ -1,5 +1,6 @@
 package com.pzc.navigationweb.dto.reqdto;
 
+import cn.hutool.core.lang.Assert;
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.pzc.navigationweb.dto.basedto.ReqDTO;
 import lombok.Data;
@@ -34,14 +35,9 @@ public class LoginUser extends ReqDTO {
     private String passwordTwo;
 
 
+    @Override
     public void validation() {
-        if (StringUtils.isBlank(account)) {
-            throw new IllegalArgumentException("账号不能为空！");
-        }
-
-        if (StringUtils.isBlank(password)) {
-            throw new IllegalArgumentException("密码不能为空！");
-        }
-
+        Assert.notBlank(getAccount(),"账号不能为空！");
+        Assert.notBlank(getPassword(),"密码不能为空！");
     }
 }

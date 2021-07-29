@@ -10,6 +10,7 @@ import com.pzc.navigationweb.domain.dbdo.FavoritesDO;
 import com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO;
 import com.pzc.navigationweb.domain.mapstruct.NavigationReqToDo;
 import com.pzc.navigationweb.dto.query.FavoriteQuery;
+import com.pzc.navigationweb.dto.reqdto.NavToFavoriteReqDTO;
 import com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO;
 import com.pzc.navigationweb.service.FavoriteInService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,10 @@ public class FavoriteInServiceImpl implements FavoriteInService {
     private FavoritesDOMapper favoritesDOMapper;
 
     @Override
-    public Result<NavigationResourcesRespDTO> toFavorite(String userId, String navId, Boolean isLiked) {
-        Result<NavigationResourcesRespDTO> result = new Result<>();
+    public NavigationResourcesRespDTO toFavorite(NavToFavoriteReqDTO reqDTO) {
+        String navId = reqDTO.getNavId();
+        String userId = reqDTO.getUserId();
+        boolean isLiked = reqDTO.getIsLiked();
         NavigationResourcesDO resourcesDO = navigationResourcesDOMapper.selectByPrimaryKey(navId);
 
 
@@ -52,14 +55,11 @@ public class FavoriteInServiceImpl implements FavoriteInService {
 
         NavigationResourcesRespDTO respDTO = NavigationReqToDo.INSTANCE.doToResp(resourcesDO);
         respDTO.setIsLiked(!isLiked);
-        result.setSuccess(true);
-        result.setModule(respDTO);
-        return result;
+        return respDTO;
     }
 
     @Override
-    public Result<Page<NavigationResourcesRespDTO>> pageNavigation(FavoriteQuery query) {
-        Result<Page<NavigationResourcesRespDTO>> result = new Result<>();
+    public Page<NavigationResourcesRespDTO> pageNavigation(FavoriteQuery query) {
 
         List<FavoritesDO> favoritesDOList = new ArrayList<>();
         Integer count = favoritesDOMapper.countByUserAndCategory(query);
@@ -73,7 +73,7 @@ public class FavoriteInServiceImpl implements FavoriteInService {
             navList.add(NavigationReqToDo.INSTANCE.doToResp(navigationResourcesDOMapper.selectByPrimaryKey(x.getNavId())));
         });
         page.setResult(navList);
-        result.setModule(page);
-        return result;
+//        result.setModule(page);
+        return page;
     }
 }

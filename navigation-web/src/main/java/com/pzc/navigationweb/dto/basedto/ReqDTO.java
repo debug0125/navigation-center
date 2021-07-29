@@ -21,4 +21,7 @@ public class ReqDTO implements Serializable {
     private Integer version;
     private Boolean isDel;
 
+    public void validation() {
+    }
+
 }

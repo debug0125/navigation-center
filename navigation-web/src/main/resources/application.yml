@@ -10,5 +10,6 @@ spring:
 
 # 控制台打印sql
 logging:
+  config: classpath:navigation-web-log4j2.xml
   level:
-    com.pzc.navigationweb.dao : debug
+    org.springframework.boot.autoconfigure: error

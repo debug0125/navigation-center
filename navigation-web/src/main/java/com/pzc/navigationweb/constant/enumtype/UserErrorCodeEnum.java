@@ -6,6 +6,7 @@ package com.pzc.navigationweb.constant.enumtype;
  */
 public enum UserErrorCodeEnum {
     ILLGAL_ARGUMENT("ILLGAL_ARGUMENT", "非法参数"),
+    ERROR_NAV_ID("ERROR_NAV_ID", "资源ID为空"),
     IDEMPOTENT_INVOKE("IDEMPOTENT_INVOKE", "幂等异常"),
     EXCUTE_SQL_ERROR("EXCUTE_SQL_ERROR", "执行数据库错误"),
     NOT_FIND_USER("NOT_FIND_USER", "找不到用户"),

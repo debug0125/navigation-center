@@ -44,7 +44,6 @@ public class UserLoginAspect {
 
     @Around(value = "Pointcut(function)", argNames = "joinPoint,function")
     public Object deBefore(ProceedingJoinPoint joinPoint, Login function) throws Throwable {
-        System.out.println("进入切面");
         LoginUser loginUser = (LoginUser) joinPoint.getArgs()[0];
 
         Result<UserDO> result = loginService.loginUser(loginUser);

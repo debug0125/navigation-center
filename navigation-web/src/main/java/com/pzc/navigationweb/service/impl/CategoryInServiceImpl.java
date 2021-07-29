@@ -1,9 +1,7 @@
 package com.pzc.navigationweb.service.impl;
 
 import com.alibaba.dubbo.common.utils.CollectionUtils;
-import com.alibaba.dubbo.common.utils.StringUtils;
 import com.pzc.navigationweb.common.util.InitDOUtil;
-import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.dao.CategoryDOMapper;
 import com.pzc.navigationweb.domain.dbdo.CategoryDO;
 import com.pzc.navigationweb.domain.mapstruct.CategoryMapStruct;
@@ -16,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author ryf
@@ -27,57 +26,43 @@ public class CategoryInServiceImpl implements CategoryInService {
     private CategoryDOMapper categoryDOMapper;
 
     @Override
-    public Result<List<CategoryRespDTO>> getCategoryList() {
-        Result<List<CategoryRespDTO>> result = new Result<>();
-        result.setModule(new ArrayList<>());
-        result.setSuccess(false);
-
+    public List<CategoryRespDTO> getCategoryList() {
         List<CategoryDO> categoryDOS = categoryDOMapper.getCategoryList("");
+        List<CategoryRespDTO> respDTOList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(categoryDOS)) {
-            List<CategoryRespDTO> respDTOList = CategoryMapStruct.INSTANCE.doListToRespList(categoryDOS);
+            respDTOList = CategoryMapStruct.INSTANCE.doListToRespList(categoryDOS);
             respDTOList.stream().forEach(x -> {
                 List<CategoryRespDTO> respDTOListSon =
                         CategoryMapStruct.INSTANCE.doListToRespList(Optional.ofNullable(categoryDOMapper.getCategoryList(x.getId()))
                                 .orElse(new ArrayList<>()));
                 x.setChildren(respDTOListSon);
             });
-            result.setModule(respDTOList);
-            result.setSuccess(true);
         }
-        return result;
+        return respDTOList;
     }
 
     @Override
-    public Result<CategoryRespDTO> addCategory(CategoryReqDTO categoryReqDTO) {
-        Result<CategoryRespDTO> result = new Result<>();
+    public CategoryRespDTO addCategory(CategoryReqDTO categoryReqDTO) {
         CategoryDO categoryDO = CategoryMapStruct.INSTANCE.reqToDo(categoryReqDTO);
         InitDOUtil.initField(categoryDO);
-        result.setSuccess(categoryDOMapper.insertSelective(categoryDO)>0);
-        result.setModule(CategoryMapStruct.INSTANCE.doListToRespList(Arrays.asList(categoryDO)).get(0));
-        return result;
+        categoryDOMapper.insertSelective(categoryDO);
+        return CategoryMapStruct.INSTANCE.doListToRespList(Arrays.asList(categoryDO)).get(0);
     }
 
     @Override
-    public Result<Boolean> removeCategory(CategoryReqDTO categoryReqDTO) {
-        Result<Boolean> result = new Result<>();
-        if (StringUtils.isBlank(categoryReqDTO.getId())) {
-            result.setSuccess(false);
-            result.setModule(false);
-            result.setErrMsg("删除类目时，主id不能为空！");
-            return result;
-        }
+    public Boolean removeCategory(CategoryReqDTO categoryReqDTO) {
+        AtomicBoolean result = new AtomicBoolean(false);
         CategoryDO categoryDO = categoryDOMapper.selectByPrimaryKey(categoryReqDTO.getId());
         categoryDO.setIsDel(true);
-        result.setSuccess(categoryDOMapper.updateByPrimaryKey(categoryDO)>0);
+        result.set(categoryDOMapper.updateByPrimaryKey(categoryDO) > 0);
         // 查询子类
         List<CategoryDO> doList = categoryDOMapper.getCategoryList(categoryReqDTO.getId());
         if (CollectionUtils.isNotEmpty(doList)) {
             doList.stream().forEach(x -> {
                 x.setIsDel(true);
-                categoryDOMapper.updateByPrimaryKey(x);
+                result.set(categoryDOMapper.updateByPrimaryKey(x) > 0);
             });
         }
-        result.setModule(result.isSuccess());
-        return result;
+        return result.get();
     }
 }

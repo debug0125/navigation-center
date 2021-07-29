@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       		           http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire="byName">
+
+    <!--资源操作-->
+    <bean id="submitNavigationProcess" class="com.pzc.navigationweb.application.process.SubmitNavigationProcess"/>
+    <bean id="pageNavigationProcess" class="com.pzc.navigationweb.application.process.PageNavigationProcess"/>
+    <bean id="navAddOpenCountProcess" class="com.pzc.navigationweb.application.process.NavAddOpenCountProcess"/>
+
+    <!--收藏操作-->
+    <bean id="pageFavoriteProcess" class="com.pzc.navigationweb.application.process.PageFavoriteProcess"/>
+    <bean id="navToFavoriteProcess" class="com.pzc.navigationweb.application.process.NavToFavoriteProcess"/>
+
+    <!--分类操作-->
+    <bean id="queryCategoryListProcess" class="com.pzc.navigationweb.application.process.QueryCategoryListProcess"/>
+    <bean id="addCategoryProcess" class="com.pzc.navigationweb.application.process.AddCategoryProcess"/>
+    <bean id="removeCategoryProcess" class="com.pzc.navigationweb.application.process.RemoveCategoryProcess"/>
+</beans>
