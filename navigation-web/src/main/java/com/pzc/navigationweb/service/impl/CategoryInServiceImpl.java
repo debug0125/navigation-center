@@ -2,6 +2,8 @@ package com.pzc.navigationweb.service.impl;
 
 import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.pzc.navigationweb.common.util.InitDOUtil;
+import com.pzc.navigationweb.common.util.RedisUtil;
+import com.pzc.navigationweb.constant.RedisKeyConstant;
 import com.pzc.navigationweb.dao.CategoryDOMapper;
 import com.pzc.navigationweb.domain.dbdo.CategoryDO;
 import com.pzc.navigationweb.domain.mapstruct.CategoryMapStruct;
@@ -38,6 +40,7 @@ public class CategoryInServiceImpl implements CategoryInService {
                 x.setChildren(respDTOListSon);
             });
         }
+        RedisUtil.op().setV(RedisKeyConstant.CATEGORY_REDIS_KEY,respDTOList);
         return respDTOList;
     }
 

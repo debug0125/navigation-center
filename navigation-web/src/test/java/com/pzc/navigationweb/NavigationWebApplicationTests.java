@@ -54,7 +54,7 @@ class NavigationWebApplicationTests {
     @Test
     void redisTest(){
         RedisUtil.op().setV("name","ryf");
-        System.out.println(RedisUtil.op().get("name"));
+        System.out.println((String) RedisUtil.op().getV("name"));
 
     }
 

@@ -3,9 +3,7 @@ package com.pzc.navigationweb.filter;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.pzc.myredis.MyJedis;
-import com.pzc.navigationweb.common.util.CookieUtil;
-import com.pzc.navigationweb.common.util.Result;
-import com.pzc.navigationweb.common.util.UserSessionUtil;
+import com.pzc.navigationweb.common.util.*;
 import com.pzc.navigationweb.constant.LoginTokenConstant;
 import com.pzc.navigationweb.constant.enumtype.UserErrorCodeEnum;
 import com.pzc.navigationweb.domain.dbdo.UserDO;
@@ -27,7 +25,8 @@ public class Interceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
         String token = CookieUtil.getCookie(request, LoginTokenConstant.TOKEN_KEY);
-        UserDO userDO = UserSessionUtil.getCurreentUser(token);
+//        UserDO userDO = UserSessionUtil.getCurreentUser(token);
+        UserDO userDO = UserRedisUtil.getUser(token);
         if (userDO == null) {
             //若为空则返回登录界面
             failRequest(UserErrorCodeEnum.REQUEST_TOKEN.getErrCode(), UserErrorCodeEnum.REQUEST_TOKEN.getErrMsg(), response);

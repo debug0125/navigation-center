@@ -2,10 +2,7 @@ package com.pzc.navigationweb.aspect;
 
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.pzc.navigationweb.aspect.annotation.Login;
-import com.pzc.navigationweb.common.util.CookieUtil;
-import com.pzc.navigationweb.common.util.Result;
-import com.pzc.navigationweb.common.util.TokenProccessor;
-import com.pzc.navigationweb.common.util.UserSessionUtil;
+import com.pzc.navigationweb.common.util.*;
 import com.pzc.navigationweb.domain.dbdo.UserDO;
 import com.pzc.navigationweb.dto.reqdto.LoginUser;
 import com.pzc.navigationweb.dto.respdto.UserInfoRespDTO;
@@ -55,7 +52,9 @@ public class UserLoginAspect {
             String token = TokenProccessor.getInstance().makeToken();
             UserDO userDO = result.getModule();
             userDO.setToken(token);
-            UserSessionUtil.putCurrebtUser(userDO);
+//            UserSessionUtil.putCurrebtUser(userDO);
+            // 用户信息存入redis
+            RedisUtil.op().setVex(token, 60 * 60 * 4,userDO);
             // 存入cookie
             CookieUtil.saveCookie(userDO, httpResponse, value);
             result.setSuccess(true);

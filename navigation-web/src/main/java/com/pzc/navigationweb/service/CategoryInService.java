@@ -1,6 +1,5 @@
 package com.pzc.navigationweb.service;
 
-import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.dto.reqdto.CategoryReqDTO;
 import com.pzc.navigationweb.dto.respdto.CategoryRespDTO;
 

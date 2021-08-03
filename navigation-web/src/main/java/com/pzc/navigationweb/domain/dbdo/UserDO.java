@@ -2,12 +2,14 @@ package com.pzc.navigationweb.domain.dbdo;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author ryf
  * @date 5/17/21 3:19 PM
  */
 @Data
-public class UserDO extends BaseDO {
+public class UserDO extends BaseDO implements Serializable {
 
     private String account;
 

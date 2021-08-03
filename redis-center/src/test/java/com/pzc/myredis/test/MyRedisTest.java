@@ -8,7 +8,7 @@ import java.util.List;
 
 public class MyRedisTest {
 
-    private static String redisIps="192.168.0.149:7000,192.168.0.149:7001,192.168.0.149:7002";
+    private static String redisIps="127.0.0.1:7000,127.0.0.1:7001,127.0.0.1:7002";
     private static String password="";
 
     public static void main(String[] args) throws Throwable {
@@ -36,8 +36,8 @@ public class MyRedisTest {
         myJedis.setMyJedisConfig(jedisConfig);
         myJedis.init();
 
-        myJedis.op().delV("name");
-//        myJedis.op().setV("name","ryf");
+//        myJedis.op().delV("name");
+//        myJedis.op().setVex("name",30,"ryf");
         System.out.println((String) myJedis.op().getV("name"));
 
 
