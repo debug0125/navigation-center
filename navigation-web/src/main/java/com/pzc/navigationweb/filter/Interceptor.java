@@ -2,6 +2,7 @@ package com.pzc.navigationweb.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.pzc.myredis.MyJedis;
 import com.pzc.navigationweb.common.util.CookieUtil;
 import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.common.util.UserSessionUtil;

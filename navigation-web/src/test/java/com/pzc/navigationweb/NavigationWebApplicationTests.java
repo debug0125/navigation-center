@@ -1,6 +1,7 @@
 package com.pzc.navigationweb;
 
 import com.github.pagehelper.PageInfo;
+import com.pzc.navigationweb.common.util.RedisUtil;
 import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO;
 import com.pzc.navigationweb.dto.query.NavigationQuery;
@@ -47,6 +48,13 @@ class NavigationWebApplicationTests {
         loginUser.setPassword("123456");
         loginUser.setPasswordTwo("123456");
         loginService.register(loginUser);
+
+    }
+
+    @Test
+    void redisTest(){
+        RedisUtil.op().setV("name","ryf");
+        System.out.println(RedisUtil.op().get("name"));
 
     }
 
