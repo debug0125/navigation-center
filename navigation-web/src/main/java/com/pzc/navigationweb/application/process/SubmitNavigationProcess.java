@@ -18,7 +18,6 @@ public class SubmitNavigationProcess extends DefaultProcess<NavigationResourcesR
     @Override
     public void process(Context<NavigationResourcesReqDTO, Boolean> context) {
         NavigationResourcesReqDTO reqDTO = context.getParam();
-        reqDTO.validation();
         context.setResultModule(navigationResourcesService.submit(reqDTO));
     }
 }

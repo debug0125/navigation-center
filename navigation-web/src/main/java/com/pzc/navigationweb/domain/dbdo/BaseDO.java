@@ -12,8 +12,12 @@ import java.util.Date;
 public class BaseDO implements BaseDOInt {
     private String id;
     private Date createDate;
+    private String createId;
+    private String createAccount;
     private String createName;
     private Date modifyDate;
+    private String modifyId;
+    private String modifyAccount;
     private String modifyName;
     private Integer version;
     private Boolean isDel;

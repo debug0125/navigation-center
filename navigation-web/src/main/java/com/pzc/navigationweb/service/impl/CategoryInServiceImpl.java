@@ -57,12 +57,14 @@ public class CategoryInServiceImpl implements CategoryInService {
         AtomicBoolean result = new AtomicBoolean(false);
         CategoryDO categoryDO = categoryDOMapper.selectByPrimaryKey(categoryReqDTO.getId());
         categoryDO.setIsDel(true);
+        InitDOUtil.getUpdateField(categoryDO);
         result.set(categoryDOMapper.updateByPrimaryKey(categoryDO) > 0);
         // 查询子类
         List<CategoryDO> doList = categoryDOMapper.getCategoryList(categoryReqDTO.getId());
         if (CollectionUtils.isNotEmpty(doList)) {
             doList.stream().forEach(x -> {
                 x.setIsDel(true);
+                InitDOUtil.getUpdateField(x);
                 result.set(categoryDOMapper.updateByPrimaryKey(x) > 0);
             });
         }

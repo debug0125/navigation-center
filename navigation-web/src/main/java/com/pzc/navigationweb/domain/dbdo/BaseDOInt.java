@@ -16,6 +16,14 @@ public interface BaseDOInt {
 
     public void setCreateDate(Date createDate);
 
+    public String getCreateId();
+
+    public void setCreateId(String createName);
+
+    public String getCreateAccount();
+
+    public void setCreateAccount(String createName);
+
     public String getCreateName();
 
     public void setCreateName(String createName);
@@ -23,6 +31,14 @@ public interface BaseDOInt {
     public Date getModifyDate();
 
     public void setModifyDate(Date modifyDate);
+
+    public String getModifyId();
+
+    public void setModifyId(String createName);
+
+    public String getModifyAccount();
+
+    public void setModifyAccount(String createName);
 
     public String getModifyName();
 

@@ -17,11 +17,13 @@
 
     <aop:config>
         <aop:aspect id="AspectXmlConfig" ref="aspectXmlConfig">
-            <aop:pointcut id="anyPublicMethod" expression="execution(* com.pzc.navigationweb.service.CategoryInService.add*(..)) || execution(* com.pzc.navigationweb.service.CategoryInService.remove*(..))"/>
+            <aop:pointcut id="categoryInServiceAop"
+                          expression="execution(* com.pzc.navigationweb.service.CategoryInService.add*(..)) ||
+                          execution(* com.pzc.navigationweb.service.CategoryInService.remove*(..))"/>
             <!--<aop:around method="aroundAnyPublicMethod" pointcut-ref="anyPublicMethod"/>-->
             <!--<aop:before method="beforeAnyPublicMethod" pointcut-ref="anyPublicMethod"/>-->
             <!--<aop:before method="beforeAnyPublicMethod" pointcut="execution(public * *(..))"/>-->
-            <aop:after method="finalizeAnyPublicMethod" pointcut-ref="anyPublicMethod"/>
+            <aop:after method="finalizeAnyPublicMethod" pointcut-ref="categoryInServiceAop"/>
             <!--<aop:after-returning method="afterAnyPublicMethod" pointcut-ref="anyPublicMethod"/>-->
             <!--<aop:after-throwing method="afterThrowingAnyPublicMethod" pointcut-ref="anyPublicMethod"/>-->
         </aop:aspect>
