@@ -7,6 +7,8 @@ server:
 spring:
   application:
     name: navigation-web
+  main:
+    banner-mode: console
 
 # 控制台打印sql
 logging:

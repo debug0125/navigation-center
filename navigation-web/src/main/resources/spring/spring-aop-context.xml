@@ -17,13 +17,13 @@
 
     <aop:config>
         <aop:aspect id="AspectXmlConfig" ref="aspectXmlConfig">
-            <aop:pointcut id="categoryInServiceAop"
-                          expression="execution(* com.pzc.navigationweb.service.CategoryInService.add*(..)) ||
-                          execution(* com.pzc.navigationweb.service.CategoryInService.remove*(..))"/>
+            <aop:pointcut id="categoryInServiceCut"
+                          expression="execution(* com.pzc.navigationweb.service.CategoryInService.add*(..))
+                                || execution(* com.pzc.navigationweb.service.CategoryInService.remove*(..))"/>
             <!--<aop:around method="aroundAnyPublicMethod" pointcut-ref="anyPublicMethod"/>-->
             <!--<aop:before method="beforeAnyPublicMethod" pointcut-ref="anyPublicMethod"/>-->
             <!--<aop:before method="beforeAnyPublicMethod" pointcut="execution(public * *(..))"/>-->
-            <aop:after method="finalizeAnyPublicMethod" pointcut-ref="categoryInServiceAop"/>
+            <aop:after method="finalizeAnyPublicMethod" pointcut-ref="categoryInServiceCut"/>
             <!--<aop:after-returning method="afterAnyPublicMethod" pointcut-ref="anyPublicMethod"/>-->
             <!--<aop:after-throwing method="afterThrowingAnyPublicMethod" pointcut-ref="anyPublicMethod"/>-->
         </aop:aspect>
@@ -33,18 +33,18 @@
     <!--<bean id="echoService" class="org.geekbang.thinking.in.spring.aop.overview.DefaultEchoService"/>-->
 
     <!--<bean id="echoServiceMethodInterceptor"-->
-          <!--class="org.geekbang.thinking.in.spring.aop.features.interceptor.EchoServiceMethodInterceptor"/>-->
+    <!--class="org.geekbang.thinking.in.spring.aop.features.interceptor.EchoServiceMethodInterceptor"/>-->
 
     <!--<bean id="targetSource" class="org.springframework.aop.target.HotSwappableTargetSource">-->
-        <!--<constructor-arg ref="echoService"/>-->
+    <!--<constructor-arg ref="echoService"/>-->
     <!--</bean>-->
 
     <!--<bean id="echoServiceProxyFactoryBean" class="org.springframework.aop.framework.ProxyFactoryBean">-->
-        <!--<property name="targetName" value="echoService"/>-->
-        <!--<property name="interceptorNames">-->
-            <!--<value>echoServiceMethodInterceptor</value>-->
-        <!--</property>-->
-        <!--<property name="targetSource" ref="targetSource"/>-->
+    <!--<property name="targetName" value="echoService"/>-->
+    <!--<property name="interceptorNames">-->
+    <!--<value>echoServiceMethodInterceptor</value>-->
+    <!--</property>-->
+    <!--<property name="targetSource" ref="targetSource"/>-->
     <!--</bean>-->
 
 </beans>

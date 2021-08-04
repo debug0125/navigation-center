@@ -19,6 +19,7 @@ target/
 *.iml
 *.ipr
 *.properties
+banner.txt
 
 ### NetBeans ###
 /nbproject/private/
