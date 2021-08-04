@@ -1,9 +1,9 @@
 package com.pzc.navigationweb.controller;
 
-import com.github.pagehelper.PageInfo;
 import com.pzc.navigationweb.application.process.NavAddOpenCountProcess;
 import com.pzc.navigationweb.application.process.PageNavigationProcess;
 import com.pzc.navigationweb.application.process.SubmitNavigationProcess;
+import com.pzc.navigationweb.common.util.Page;
 import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.dto.query.NavigationQuery;
 import com.pzc.navigationweb.dto.reqdto.AddNavOpenCountReqDTO;
@@ -35,11 +35,10 @@ public class NavigationController extends BaseController {
     }
 
     @RequestMapping("/pageNavigation")
-    public Result<PageInfo<NavigationResourcesRespDTO>> pageNavigation(NavigationQuery query) {
+    public Result<Page<NavigationResourcesRespDTO>> pageNavigation(NavigationQuery query) {
         return pageNavigationProcess.start(query);
     }
 
-    // todo 前端改造入参
     @RequestMapping("/addOpenCount")
     public Result<NavigationResourcesRespDTO> addOpenCount(AddNavOpenCountReqDTO reqDTO) {
         return navAddOpenCountProcess.start(reqDTO);

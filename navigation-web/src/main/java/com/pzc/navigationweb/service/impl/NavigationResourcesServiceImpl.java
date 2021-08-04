@@ -3,10 +3,11 @@ package com.pzc.navigationweb.service.impl;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.alibaba.dubbo.common.utils.StringUtils;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+//import com.github.pagehelper.Page;
+//import com.github.pagehelper.PageHelper;
+//import com.github.pagehelper.PageInfo;
 import com.pzc.navigationweb.common.util.InitDOUtil;
+import com.pzc.navigationweb.common.util.Page;
 import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.common.util.UserSessionUtil;
 import com.pzc.navigationweb.constant.ImgConstants;
@@ -76,31 +77,68 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
     }
 
     @Override
-    public PageInfo<NavigationResourcesRespDTO> pageNavigation(NavigationQuery query) {
-        Page<NavigationResourcesRespDTO> page = PageHelper.startPage(query.getPageNo(), query.getPageSize(), true);
-        navigationResourcesDOMapper.listNavigation(query);
-        PageInfo<NavigationResourcesRespDTO> pageInfo = new PageInfo<>(page);
-        pageInfo.getList().stream().forEach(x -> {
-            x.setCreateDateStr(DateUtil.formatDateTime(x.getCreateDate()));
-            FavoritesDO favoritesDO = favoritesDOMapper.selectByUserNavId(UserSessionUtil.getCurreentUserByKey().getId(),x.getId());
-            x.setIsLiked( favoritesDO != null);
-            x.setLikeCount(favoritesDOMapper.countByNavId(x.getId()));
+    public Page<NavigationResourcesRespDTO> pageNavigation(NavigationQuery query) {
+        Integer count = navigationResourcesDOMapper.countNavigation(query);
+        Page<NavigationResourcesRespDTO> page = new Page<>(query.getPageNo(), query.getPageSize(), count);
+        List<NavigationResourcesRespDTO> dtoList = new ArrayList<>();
+        if (count > 0) {
+            dtoList = navigationResourcesDOMapper.pageNavigation(query);
+            dtoList.stream().forEach(x -> {
+                x.setCreateDateStr(DateUtil.formatDateTime(x.getCreateDate()));
+                FavoritesDO favoritesDO = favoritesDOMapper.selectByUserNavId(UserSessionUtil.getCurreentUserByKey().getId(),x.getId());
+                x.setIsLiked( favoritesDO != null);
+                x.setLikeCount(favoritesDOMapper.countByNavId(x.getId()));
 
-            List<CategoryDO> categoryDOArrayList = new ArrayList<>();
-            // 获取标签
-            NavCategoryDO navCategoryDO = new NavCategoryDO();
-            navCategoryDO.setNavId(x.getId());
-            List<NavCategoryDO> navCategoryDOList = navCategoryDOMapper.queryListByCategoryId(navCategoryDO);
-            if (CollectionUtils.isNotEmpty(navCategoryDOList)) {
-                navCategoryDOList.stream().forEach(navC -> {
-                    CategoryDO categoryDO = categoryDOMapper.selectByPrimaryKey(navC.getCategoryId());
-                    categoryDOArrayList.add(categoryDO);
-                });
-                x.setCategoryRespDTOList(CategoryMapStruct.INSTANCE.doListToRespList(categoryDOArrayList));
-            }
+                List<CategoryDO> categoryDOArrayList = new ArrayList<>();
+                // 获取标签
+                NavCategoryDO navCategoryDO = new NavCategoryDO();
+                navCategoryDO.setNavId(x.getId());
+                List<NavCategoryDO> navCategoryDOList = navCategoryDOMapper.queryListByCategoryId(navCategoryDO);
+                if (CollectionUtils.isNotEmpty(navCategoryDOList)) {
+                    navCategoryDOList.stream().forEach(navC -> {
+                        CategoryDO categoryDO = categoryDOMapper.selectByPrimaryKey(navC.getCategoryId());
+                        categoryDOArrayList.add(categoryDO);
+                    });
+                    x.setCategoryRespDTOList(CategoryMapStruct.INSTANCE.doListToRespList(categoryDOArrayList));
+                }
+            });
 
-        });
-        return pageInfo;
+        }
+        page.setResult(dtoList);
+        return page;
+
+
+
+
+
+
+
+
+
+//        Page<NavigationResourcesRespDTO> page = PageHelper.startPage(query.getPageNo(), query.getPageSize(), true);
+//        navigationResourcesDOMapper.listNavigation(query);
+//        PageInfo<NavigationResourcesRespDTO> pageInfo = new PageInfo<>(page);
+//        pageInfo.getList().stream().forEach(x -> {
+//            x.setCreateDateStr(DateUtil.formatDateTime(x.getCreateDate()));
+//            FavoritesDO favoritesDO = favoritesDOMapper.selectByUserNavId(UserSessionUtil.getCurreentUserByKey().getId(),x.getId());
+//            x.setIsLiked( favoritesDO != null);
+//            x.setLikeCount(favoritesDOMapper.countByNavId(x.getId()));
+//
+//            List<CategoryDO> categoryDOArrayList = new ArrayList<>();
+//            // 获取标签
+//            NavCategoryDO navCategoryDO = new NavCategoryDO();
+//            navCategoryDO.setNavId(x.getId());
+//            List<NavCategoryDO> navCategoryDOList = navCategoryDOMapper.queryListByCategoryId(navCategoryDO);
+//            if (CollectionUtils.isNotEmpty(navCategoryDOList)) {
+//                navCategoryDOList.stream().forEach(navC -> {
+//                    CategoryDO categoryDO = categoryDOMapper.selectByPrimaryKey(navC.getCategoryId());
+//                    categoryDOArrayList.add(categoryDO);
+//                });
+//                x.setCategoryRespDTOList(CategoryMapStruct.INSTANCE.doListToRespList(categoryDOArrayList));
+//            }
+//
+//        });
+//        return pageInfo;
     }
 
     @Override
@@ -132,7 +170,6 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
     }
 
     private static void getLocalMac(InetAddress ia) throws SocketException {
-        // TODO Auto-generated method stub
         //获取网卡，获取地址
         byte[] mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
         System.out.println("mac数组长度："+mac.length);

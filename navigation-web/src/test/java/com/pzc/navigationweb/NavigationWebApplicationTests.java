@@ -33,10 +33,10 @@ class NavigationWebApplicationTests {
 
     @Test
     void listTest(){
-        PageInfo<NavigationResourcesRespDTO> pageInfoResult = navigationResourcesService.pageNavigation(new NavigationQuery());
-        if (pageInfoResult != null) {
-            System.out.println(111);
-        }
+//        PageInfo<NavigationResourcesRespDTO> pageInfoResult = navigationResourcesService.pageNavigation(new NavigationQuery());
+//        if (pageInfoResult != null) {
+//            System.out.println(111);
+//        }
 
     }
 

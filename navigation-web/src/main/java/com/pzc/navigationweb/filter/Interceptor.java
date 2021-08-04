@@ -1,5 +1,6 @@
 package com.pzc.navigationweb.filter;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.pzc.myredis.MyJedis;
@@ -26,6 +27,11 @@ public class Interceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
         String token = CookieUtil.getCookie(request, LoginTokenConstant.TOKEN_KEY);
 //        UserDO userDO = UserSessionUtil.getCurreentUser(token);
+        if (StrUtil.isBlank(token)) {
+            //若为空则返回登录界面
+            failRequest(UserErrorCodeEnum.REQUEST_TOKEN.getErrCode(), UserErrorCodeEnum.REQUEST_TOKEN.getErrMsg(), response);
+            return false;
+        }
         UserDO userDO = UserRedisUtil.getUser(token);
         if (userDO == null) {
             //若为空则返回登录界面

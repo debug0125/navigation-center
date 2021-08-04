@@ -1,6 +1,7 @@
 package com.pzc.navigationweb.service;
 
 import com.github.pagehelper.PageInfo;
+import com.pzc.navigationweb.common.util.Page;
 import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.dto.query.NavigationQuery;
 import com.pzc.navigationweb.dto.reqdto.AddNavOpenCountReqDTO;
@@ -25,7 +26,7 @@ public interface NavigationResourcesService {
      * @param query
      * @return
      */
-    PageInfo<NavigationResourcesRespDTO> pageNavigation(NavigationQuery query);
+    Page<NavigationResourcesRespDTO> pageNavigation(NavigationQuery query);
 
     /**
      * 增加打开次数

@@ -9,6 +9,10 @@ import java.util.List;
 
 public interface NavigationResourcesDOMapper {
 
+    Integer countNavigation(NavigationQuery query);
+
+    List<NavigationResourcesRespDTO> pageNavigation(NavigationQuery query);
+
     List<NavigationResourcesRespDTO> listNavigation(NavigationQuery query);
 
     int deleteByPrimaryKey(String id);

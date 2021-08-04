@@ -1,64 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pzc.navigationweb.dao.NavigationResourcesDOMapper">
-  <resultMap id="BaseResultMap" type="com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO">
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
-    <result column="create_name" jdbcType="VARCHAR" property="createName" />
-    <result column="modify_date" jdbcType="TIMESTAMP" property="modifyDate" />
-    <result column="modify_name" jdbcType="VARCHAR" property="modifyName" />
-    <result column="version" jdbcType="INTEGER" property="version" />
-    <result column="is_del" jdbcType="TINYINT" property="isDel" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
-    <result column="navigation_url" jdbcType="VARCHAR" property="navigationUrl" />
-    <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
-    <result column="detail" jdbcType="VARCHAR" property="detail" />
-    <result column="type" jdbcType="INTEGER" property="type" />
-    <result column="open_count" jdbcType="INTEGER" property="openCount" />
-    <result column="like_count" jdbcType="INTEGER" property="likeCount" />
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="modify_date" jdbcType="TIMESTAMP" property="modifyDate"/>
+        <result column="modify_name" jdbcType="VARCHAR" property="modifyName"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="is_del" jdbcType="TINYINT" property="isDel"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="navigation_url" jdbcType="VARCHAR" property="navigationUrl"/>
+        <result column="logo_url" jdbcType="VARCHAR" property="logoUrl"/>
+        <result column="detail" jdbcType="VARCHAR" property="detail"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="open_count" jdbcType="INTEGER" property="openCount"/>
+        <result column="like_count" jdbcType="INTEGER" property="likeCount"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, create_date, create_name, modify_date, modify_name, version, is_del, name, description,
     navigation_url, logo_url, detail, type, open_count, like_count
   </sql>
-  
-  <sql id="selectTable">
-    select
-    <include refid="Base_Column_List"/>
-    from navigation_resources
-  </sql>
-  <sql id="condition">
-    <where>
-    is_del = 0
-      <if test="name != null and name != ''">
-        and name like concat('%',#{name},'%' )
-      </if>
-      <if test="type != null and type != ''">
-        and type = #{type}
-      </if>
-    </where>
+    <sql id="Join_Base_Column_List">
+    nr.id, nr.create_date, nr.create_name, nr.modify_date, nr.modify_name, nr.version, nr.is_del, nr.name, nr.description,
+    nr.navigation_url, nr.logo_url, nr.detail, nr.type, nr.open_count, nr.like_count
   </sql>
 
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from navigation_resources
-    where id = #{id,jdbcType=VARCHAR}
-  </select>
-  
-  
-  <select id="listNavigation" resultType="com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO"
-      parameterType="com.pzc.navigationweb.dto.query.NavigationQuery">
-    <include refid="selectTable"/>
-    <include refid="condition"/>
-  </select>
+    <sql id="selectTable">
+        select
+        <include refid="Base_Column_List"/>
+        from navigation_resources
+    </sql>
+    <sql id="condition">
+        <where>
+            is_del = 0
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%' )
+            </if>
+            <if test="type != null and type != ''">
+                and type = #{type}
+            </if>
+        </where>
+    </sql>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <sql id="joinCondition">
+        <where>
+            nr.is_del = 0
+            <if test="name != null and name != ''">
+                and nr.name like concat('%',#{name},'%' )
+            </if>
+            <if test="type != null and type != ''">
+                and nr.type = #{type}
+            </if>
+            <if test="categoryIds != null and categoryIds.size() > 0">
+                and nc.category_id in
+                <foreach collection="categoryIds" item="categoryId" open="(" separator="," close=")">
+                    #{categoryId}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+
+    <select id="countNavigation" resultType="java.lang.Integer"
+            parameterType="com.pzc.navigationweb.dto.query.NavigationQuery">
+        select count(a.id) from (
+            select distinct
+            <include refid="Join_Base_Column_List"/>
+            from navigation_resources nr
+            left join nav_category nc
+            on nr.id = nc.nav_id
+            <include refid="joinCondition"/>
+        ) a
+    </select>
+    <select id="pageNavigation" resultType="com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO"
+            parameterType="com.pzc.navigationweb.dto.query.NavigationQuery">
+        select a.* from (
+            select distinct
+            <include refid="Join_Base_Column_List"/>
+            from navigation_resources nr
+            left join nav_category nc
+            on nr.id = nc.nav_id
+            <include refid="joinCondition"/>
+            order by nr.create_date desc
+            limit #{offset},#{limit}
+        ) a
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from navigation_resources
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="listNavigation" resultType="com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO"
+            parameterType="com.pzc.navigationweb.dto.query.NavigationQuery">
+        <include refid="selectTable"/>
+        <include refid="condition"/>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from navigation_resources
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO">
+    <insert id="insert" parameterType="com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO">
     insert into navigation_resources (id, create_date, create_name, 
       modify_date, modify_name, version, 
       is_del, name, description,
@@ -70,140 +118,140 @@
       #{navigationUrl,jdbcType=VARCHAR}, #{logoUrl,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR}, 
       #{type,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO">
-    insert into navigation_resources
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="createDate != null">
-        create_date,
-      </if>
-      <if test="createName != null">
-        create_name,
-      </if>
-      <if test="modifyDate != null">
-        modify_date,
-      </if>
-      <if test="modifyName != null">
-        modify_name,
-      </if>
-      <if test="version != null">
-        version,
-      </if>
-      <if test="isDel != null">
-        is_del,
-      </if>
-      <if test="name != null">
-        name,
-      </if>
-      <if test="description != null">
-        description,
-      </if>
-      <if test="navigationUrl != null">
-        navigation_url,
-      </if>
-      <if test="logoUrl != null">
-        logo_url,
-      </if>
-      <if test="detail != null">
-        detail,
-      </if>
-      <if test="type != null">
-        type,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="createDate != null">
-        #{createDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createName != null">
-        #{createName,jdbcType=VARCHAR},
-      </if>
-      <if test="modifyDate != null">
-        #{modifyDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyName != null">
-        #{modifyName,jdbcType=VARCHAR},
-      </if>
-      <if test="version != null">
-        #{version,jdbcType=INTEGER},
-      </if>
-      <if test="isDel != null">
-        #{isDel,jdbcType=TINYINT},
-      </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="description != null">
-        #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="navigationUrl != null">
-        #{navigationUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="logoUrl != null">
-        #{logoUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="detail != null">
-        #{detail,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO">
-    update navigation_resources
-    <set>
-      <if test="createDate != null">
-        create_date = #{createDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createName != null">
-        create_name = #{createName,jdbcType=VARCHAR},
-      </if>
-      <if test="modifyDate != null">
-        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyName != null">
-        modify_name = #{modifyName,jdbcType=VARCHAR},
-      </if>
-      <if test="version != null">
-        version = #{version,jdbcType=INTEGER},
-      </if>
-      <if test="isDel != null">
-        is_del = #{isDel,jdbcType=TINYINT},
-      </if>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="description != null">
-        description = #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="navigationUrl != null">
-        navigation_url = #{navigationUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="logoUrl != null">
-        logo_url = #{logoUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="detail != null">
-        detail = #{detail,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null">
-        type = #{type,jdbcType=INTEGER},
-      </if>
-      <if test="openCount != null">
-        open_count = #{openCount,jdbcType=INTEGER},
-      </if>
-      <if test="likeCount != null">
-        like_count = #{likeCount,jdbcType=INTEGER},
-      </if>
-    </set>
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO">
+    <insert id="insertSelective" parameterType="com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO">
+        insert into navigation_resources
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="createName != null">
+                create_name,
+            </if>
+            <if test="modifyDate != null">
+                modify_date,
+            </if>
+            <if test="modifyName != null">
+                modify_name,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+            <if test="isDel != null">
+                is_del,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="navigationUrl != null">
+                navigation_url,
+            </if>
+            <if test="logoUrl != null">
+                logo_url,
+            </if>
+            <if test="detail != null">
+                detail,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createName != null">
+                #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="modifyDate != null">
+                #{modifyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyName != null">
+                #{modifyName,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
+            <if test="isDel != null">
+                #{isDel,jdbcType=TINYINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="navigationUrl != null">
+                #{navigationUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="logoUrl != null">
+                #{logoUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="detail != null">
+                #{detail,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO">
+        update navigation_resources
+        <set>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createName != null">
+                create_name = #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="modifyDate != null">
+                modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyName != null">
+                modify_name = #{modifyName,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                version = #{version,jdbcType=INTEGER},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel,jdbcType=TINYINT},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="navigationUrl != null">
+                navigation_url = #{navigationUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="logoUrl != null">
+                logo_url = #{logoUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="detail != null">
+                detail = #{detail,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="openCount != null">
+                open_count = #{openCount,jdbcType=INTEGER},
+            </if>
+            <if test="likeCount != null">
+                like_count = #{likeCount,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO">
     update navigation_resources
     set create_date = #{createDate,jdbcType=TIMESTAMP},
       create_name = #{createName,jdbcType=VARCHAR},
