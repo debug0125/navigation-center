@@ -74,36 +74,45 @@ class NavigationWebApplicationTests {
 
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         String path = "/Users/orange_r/Desktop/DLT.txt";
         String url = "http://kaijiang.500.com/shtml/dlt/21092.shtml?0_ala_baidu";
-        String content = HttpUtil.get(url);
-        File file = new File(path);
-        OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
-        osw.write(content);
-        osw.close();
+        try {
+            String content = HttpUtil.get(url);
+            File file = new File(path);
+            OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+            osw.write(content);
+            osw.close();
 
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
-        String regexDate = "<strong>\\d*</strong>";
-        String regexNum = "<td>\\d{1,2}(\\s\\d+)*.\\d{1,2}\\s\\d+</td>";
-        List<String> regexList = new ArrayList<>();
-        regexList.add(regexDate);
-        regexList.add(regexNum);
-        String buf ;
-        while ((buf = br.readLine()) != null) {
+            String regexDate = "<strong>\\d*</strong>";
+            String regexNum = "<td>\\d{1,2}(\\s\\d+)*.\\d{1,2}\\s\\d+</td>";
+            List<String> regexList = new ArrayList<>();
+            regexList.add(regexDate);
+            regexList.add(regexNum);
+            String buf ;
+            while ((buf = br.readLine()) != null) {
 
-            String finalBuf = buf;
-            regexList.stream().forEach(x -> {
-                Pattern proInfo = Pattern.compile(x, Pattern.DOTALL);
-                Matcher buf_m = proInfo.matcher(finalBuf);
-                if (buf_m.find()) {
-                    String bugGroup = buf_m.group();
-                    System.out.println(bugGroup.substring(bugGroup.indexOf('>')+1,
-                            bugGroup.lastIndexOf('<')));
-                }
-            });
+                String finalBuf = buf;
+                regexList.stream().forEach(x -> {
+                    Pattern proInfo = Pattern.compile(x, Pattern.DOTALL);
+                    Matcher buf_m = proInfo.matcher(finalBuf);
+                    if (buf_m.find()) {
+                        String bugGroup = buf_m.group();
+                        System.out.println(bugGroup.substring(bugGroup.indexOf('>')+1,
+                                bugGroup.lastIndexOf('<')));
+                    }
+                });
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            File file = new File(path);
+            if (file.exists()) {
+                file.delete();
+            }
         }
     }
 

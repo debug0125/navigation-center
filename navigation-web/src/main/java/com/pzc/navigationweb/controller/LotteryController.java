@@ -1,13 +1,11 @@
 package com.pzc.navigationweb.controller;
 
-import com.pzc.navigationweb.application.process.AddCategoryProcess;
-import com.pzc.navigationweb.application.process.PageLotteryProcess;
-import com.pzc.navigationweb.application.process.QueryCategoryListProcess;
-import com.pzc.navigationweb.application.process.RemoveCategoryProcess;
+import com.pzc.navigationweb.application.process.*;
 import com.pzc.navigationweb.common.util.Page;
 import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.dto.query.LotteryQuery;
 import com.pzc.navigationweb.dto.reqdto.CategoryReqDTO;
+import com.pzc.navigationweb.dto.reqdto.LotteryReqDTO;
 import com.pzc.navigationweb.dto.respdto.CategoryRespDTO;
 import com.pzc.navigationweb.dto.respdto.LotteryRespDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +24,14 @@ public class LotteryController extends BaseController {
     public static final String PAGE_NAME = "/lottery";
 
     @Autowired
-    private QueryCategoryListProcess queryCategoryListProcess;
+    private AddCustomLotteryNumProcess addCustomLotteryNumProcess;
 
     @Autowired
     private PageLotteryProcess pageLotteryProcess;
 
     @RequestMapping("/addCustomLotteryNumber")
-    public Result<List<CategoryRespDTO>> getCategoryList(CategoryReqDTO categoryReqDTO) {
-        return queryCategoryListProcess.start(categoryReqDTO);
+    public Result<Boolean> addCustomLotteryNumber(LotteryReqDTO lotteryReqDTO) {
+        return addCustomLotteryNumProcess.start(lotteryReqDTO);
     }
 
     @RequestMapping("/pageLottery")

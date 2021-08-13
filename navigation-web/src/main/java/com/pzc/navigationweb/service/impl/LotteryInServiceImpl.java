@@ -2,18 +2,27 @@ package com.pzc.navigationweb.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.pzc.navigationweb.common.util.InitDOUtil;
 import com.pzc.navigationweb.common.util.Page;
+import com.pzc.navigationweb.common.util.RedisUtil;
 import com.pzc.navigationweb.common.util.Result;
+import com.pzc.navigationweb.constant.RedisKeyConstant;
 import com.pzc.navigationweb.constant.enumtype.LotteryType;
 import com.pzc.navigationweb.dao.LotteryDOMapper;
 import com.pzc.navigationweb.domain.dbdo.LotteryDO;
 import com.pzc.navigationweb.dto.query.LotteryQuery;
+import com.pzc.navigationweb.dto.reqdto.DictionaryReqDTO;
+import com.pzc.navigationweb.dto.reqdto.LotteryReqDTO;
 import com.pzc.navigationweb.dto.respdto.LotteryRespDTO;
+import com.pzc.navigationweb.service.DictionaryInService;
 import com.pzc.navigationweb.service.LotteryInService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author ryf
@@ -23,6 +32,8 @@ public class LotteryInServiceImpl implements LotteryInService {
 
     @Autowired
     private LotteryDOMapper lotteryDOMapper;
+    @Autowired
+    private DictionaryInService dictionaryInService;
 
     @Override
     public Page<LotteryRespDTO> pageLottery(LotteryQuery lotteryQuery) {
@@ -68,5 +79,23 @@ public class LotteryInServiceImpl implements LotteryInService {
 
         }
         return lotteryRespDTOPage;
+    }
+
+    @Override
+    public boolean addCustomLotteryNumber(LotteryReqDTO lotteryReqDTO) {
+        String maxEventDate = RedisUtil.op().getV(RedisKeyConstant.DLT_DATE_KEY);
+        if (StrUtil.isBlank(maxEventDate)) {
+            // 查询字典表，并推送至redis
+            DictionaryReqDTO reqDTO = new DictionaryReqDTO();
+            reqDTO.setDicKey(RedisKeyConstant.DLT_DATE_KEY);
+            maxEventDate = dictionaryInService.editDictionaryByKey(reqDTO);
+        }
+        LotteryDO lotteryDO = new LotteryDO();
+        InitDOUtil.initField(lotteryDO);
+        lotteryDO.setEventDate(maxEventDate);
+        lotteryDO.setNormalNum(lotteryReqDTO.getNormalNum());
+        lotteryDO.setSpecialNum(lotteryReqDTO.getSpecialNum());
+        lotteryDO.setType(LotteryType.CUSTOM_NUM.getType());
+        return lotteryDOMapper.insertSelective(lotteryDO) > 0;
     }
 }

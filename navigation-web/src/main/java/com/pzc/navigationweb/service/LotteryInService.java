@@ -17,4 +17,11 @@ import java.util.List;
 public interface LotteryInService {
 
     Page<LotteryRespDTO> pageLottery(LotteryQuery lotteryQuery);
+
+    /**
+     * 新增自定义彩票号码
+     * @param lotteryReqDTO
+     * @return
+     */
+    boolean addCustomLotteryNumber(LotteryReqDTO lotteryReqDTO);
 }
