@@ -21,8 +21,10 @@ import com.pzc.navigationweb.service.LotteryInService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author ryf
@@ -93,9 +95,22 @@ public class LotteryInServiceImpl implements LotteryInService {
         LotteryDO lotteryDO = new LotteryDO();
         InitDOUtil.initField(lotteryDO);
         lotteryDO.setEventDate(maxEventDate);
-        lotteryDO.setNormalNum(lotteryReqDTO.getNormalNum());
-        lotteryDO.setSpecialNum(lotteryReqDTO.getSpecialNum());
+
+        lotteryDO.setNormalNum(getFormatNum(lotteryReqDTO.getNormalNum()));
+
+        lotteryDO.setSpecialNum(getFormatNum(lotteryReqDTO.getSpecialNum()));
+
         lotteryDO.setType(LotteryType.CUSTOM_NUM.getType());
         return lotteryDOMapper.insertSelective(lotteryDO) > 0;
     }
+
+    private static String getFormatNum(String s){
+
+        List<String> stringList = Arrays.asList(s.split(" "));
+        stringList = stringList.stream().map(num -> {
+            return String.format("%02d",Integer.valueOf(num));
+        }).collect(Collectors.toList());
+        return stringList.stream().collect(Collectors.joining(" "));
+    }
+
 }
