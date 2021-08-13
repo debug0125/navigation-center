@@ -9,4 +9,5 @@
     <bean id="loginService" class="com.pzc.navigationweb.service.impl.LoginServiceImpl"/>
     <bean id="categoryInService" class="com.pzc.navigationweb.service.impl.CategoryInServiceImpl"/>
     <bean id="favoriteInService" class="com.pzc.navigationweb.service.impl.FavoriteInServiceImpl"/>
+    <bean id="lotteryInService" class="com.pzc.navigationweb.service.impl.LotteryInServiceImpl"/>
 </beans>

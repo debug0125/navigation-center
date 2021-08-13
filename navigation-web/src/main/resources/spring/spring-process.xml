@@ -18,4 +18,7 @@
     <bean id="queryCategoryListProcess" class="com.pzc.navigationweb.application.process.QueryCategoryListProcess"/>
     <bean id="addCategoryProcess" class="com.pzc.navigationweb.application.process.AddCategoryProcess"/>
     <bean id="removeCategoryProcess" class="com.pzc.navigationweb.application.process.RemoveCategoryProcess"/>
+
+    <!--彩票系统-->
+    <bean id="pageLotteryProcess" class="com.pzc.navigationweb.application.process.PageLotteryProcess"/>
 </beans>
