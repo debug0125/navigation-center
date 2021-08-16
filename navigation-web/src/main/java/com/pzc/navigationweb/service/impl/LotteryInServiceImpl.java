@@ -1,13 +1,10 @@
 package com.pzc.navigationweb.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.pzc.navigationweb.common.util.InitDOUtil;
 import com.pzc.navigationweb.common.util.Page;
 import com.pzc.navigationweb.common.util.RedisUtil;
-import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.constant.RedisKeyConstant;
 import com.pzc.navigationweb.constant.enumtype.LotteryType;
 import com.pzc.navigationweb.dao.LotteryDOMapper;
@@ -23,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
