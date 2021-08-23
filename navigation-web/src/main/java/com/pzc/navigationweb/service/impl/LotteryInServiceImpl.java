@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author ryf
- * @date 5/11/21 3:14 PM1
+ * @date 5/11/21 3:14 PM
  */
 public class LotteryInServiceImpl implements LotteryInService {
 
