@@ -1,17 +1,17 @@
-server:
-  port: 8090
-  servlet:
-    context-path: /navigation-web
-
-
-spring:
-  application:
-    name: navigation-web
-  main:
-    banner-mode: console
-
-# 控制台打印sql
-logging:
-  config: classpath:navigation-web-log4j2.xml
-  level:
-    org.springframework.boot.autoconfigure: error
+#server:
+#  port: 8090
+#  servlet:
+#    context-path: /navigation-web
+#
+#
+#spring:
+#  application:
+#    name: navigation-web
+#  main:
+#    banner-mode: console
+#
+## 控制台打印sql
+#logging:
+#  config: classpath:navigation-web-log4j2.xml
+#  level:
+#    org.springframework.boot.autoconfigure: error

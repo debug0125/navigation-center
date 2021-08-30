@@ -16,7 +16,7 @@
     <!--<bean class="com.wchain.redis.ServiceCodeFactory">-->
         <!--<constructor-arg ref="redisTemplate"/>-->
     <!--</bean>-->
-    <!--<bean id="lockByRedisUtil" class="com.wchain.redis.LockByRedisUtil"/>-->
+    <bean id="lockByRedisUtil" class="com.pzc.myredis.util.LockByRedisUtil"/>
 
     <bean id="myJedis" class="com.pzc.myredis.MyJedis" init-method="init">
         <property name="myJedisConfig" ref="myRedisConfig"/>
