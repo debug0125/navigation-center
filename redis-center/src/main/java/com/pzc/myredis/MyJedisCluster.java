@@ -7,6 +7,8 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 
 public class MyJedisCluster extends JedisCluster {
@@ -128,6 +130,20 @@ public class MyJedisCluster extends JedisCluster {
         byte[] valBytes = HessianSerializerUtil.serialize(val);
 
         super.setex(keyBytes,timeout,valBytes);
+    }
+
+    public Long incrV(Object key){
+        byte[] keyBytes = HessianSerializerUtil.serialize(key);
+        return super.incr(keyBytes);
+    }
+
+    public String getSpuCode(String prefix){
+        String timePart = (new SimpleDateFormat("yyMMdd")).format(new Date());
+        prefix = prefix + timePart;
+        byte[] keyBytes = HessianSerializerUtil.serialize(prefix);
+        Long incr = super.incr(keyBytes);
+        super.expire(keyBytes, 60);
+        return String.format(prefix + "%04d", incr);
     }
 
 }

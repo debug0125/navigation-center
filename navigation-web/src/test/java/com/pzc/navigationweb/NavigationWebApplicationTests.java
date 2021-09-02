@@ -64,8 +64,12 @@ class NavigationWebApplicationTests {
 
     @Test
     void redisTest(){
-        RedisUtil.op().setV("name","ryf");
-        System.out.println((String) RedisUtil.op().getV("name"));
+//        RedisUtil.op().setV("name","ryf");
+//        System.out.println((String) RedisUtil.op().getV("name"));
+//        Long testLong = RedisUtil.op().incrV("test");
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>" + testLong);
+        String spuCode = RedisUtil.op().getSpuCode("JM");
+        System.out.println(">>>>>>>>>>>>>>>>>>>>" + spuCode);
 
     }
 
