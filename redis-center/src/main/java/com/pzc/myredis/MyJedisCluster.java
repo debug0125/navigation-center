@@ -142,7 +142,8 @@ public class MyJedisCluster extends JedisCluster {
         prefix = prefix + timePart;
         byte[] keyBytes = HessianSerializerUtil.serialize(prefix);
         Long incr = super.incr(keyBytes);
-        super.expire(keyBytes, 60);
+        // 一天过期时间
+        super.expire(keyBytes, 86400);
         return String.format(prefix + "%04d", incr);
     }
 
