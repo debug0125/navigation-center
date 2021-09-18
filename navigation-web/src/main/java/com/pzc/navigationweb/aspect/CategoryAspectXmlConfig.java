@@ -53,6 +53,7 @@ public class CategoryAspectXmlConfig {
     public void finalizeAnyPublicMethod() {
         categoryInService.getCategoryList();
         System.out.println(1);
+        System.out.println(1);
 //        RedisUtil.op().setV(RedisKeyConstant.CATEGORY_REDIS_KEY,categoryList);
     }
 
