@@ -88,7 +88,7 @@ public abstract class DefaultProcess<P extends ReqDTO, M>  implements IProcess<P
         StringBuilder sb = new StringBuilder();
         sb.append("\n");
         String processName = this.getClass().getName();
-        sb.append("********** " + processName + "**********\n");
+        sb.append("********** " + processName + "_star**********\n");
         sb.append("param:\n");
         sb.append("    " + JSON.toJSON(context.getParam()) + "\n");
         Result result = context.getResult();
@@ -107,7 +107,7 @@ public abstract class DefaultProcess<P extends ReqDTO, M>  implements IProcess<P
 
         long useTime = this.endTime - this.startTime;
         sb.append(processName).append(" useTime: ").append(useTime).append("ms \n");
-        sb.append("**********");
+        sb.append("**********" + processName + "_end**********\n");
         this.getLogger().info(sb.toString());
     }
 }

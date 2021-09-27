@@ -3,6 +3,7 @@ package com.pzc.navigationweb;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpUtil;
 import com.github.pagehelper.PageInfo;
+import com.pzc.navigationweb.application.process.PageFavoriteProcess;
 import com.pzc.navigationweb.common.util.RedisUtil;
 import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO;
@@ -14,9 +15,12 @@ import com.pzc.navigationweb.service.LoginService;
 import com.pzc.navigationweb.service.NavigationResourcesService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.*;
@@ -74,7 +78,13 @@ class NavigationWebApplicationTests {
     }
 
     @Test
-    void PaChong(){
+    void applicationContextTest(){
+
+        ApplicationContext context = new ClassPathXmlApplicationContext("spring/spring-process.xml");
+        PageFavoriteProcess pageFavoriteProcess = context.getBean("pageFavoriteProcess", PageFavoriteProcess.class);
+        Logger logger = pageFavoriteProcess.getLogger();
+        logger.info(">>>>>>>>>>>>>>>>>>>>>>>123");
+        System.out.println("123");
 
     }
 
