@@ -1,6 +1,6 @@
 package com.pzc.navigationweb.common.util;
 
-import com.google.common.base.Objects;
+//import com.google.common.base.Objects;
 import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.net.NetworkInterface;
@@ -119,22 +119,22 @@ public final class ObjectId implements Comparable<ObjectId>, Serializable {
         return _nextInc.get();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        } else if (o != null && this.getClass() == o.getClass()) {
-            ObjectId that = (ObjectId)o;
-            return Objects.equal(-4415279469780082174L, -4415279469780082174L) && Objects.equal(LOGGER, LOGGER) && Objects.equal(this._time, that._time) && Objects.equal(this._machine, that._machine) && Objects.equal(this._inc, that._inc) && Objects.equal(this._new, that._new) && Objects.equal(_nextInc, _nextInc) && Objects.equal(_genmachine, _genmachine);
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(new Object[]{-4415279469780082174L, LOGGER, this._time, this._machine, this._inc, this._new, _nextInc, _genmachine});
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) {
+//            return true;
+//        } else if (o != null && this.getClass() == o.getClass()) {
+//            ObjectId that = (ObjectId)o;
+//            return Objects.equal(-4415279469780082174L, -4415279469780082174L) && Objects.equal(LOGGER, LOGGER) && Objects.equal(this._time, that._time) && Objects.equal(this._machine, that._machine) && Objects.equal(this._inc, that._inc) && Objects.equal(this._new, that._new) && Objects.equal(_nextInc, _nextInc) && Objects.equal(_genmachine, _genmachine);
+//        } else {
+//            return false;
+//        }
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hashCode(new Object[]{-4415279469780082174L, LOGGER, this._time, this._machine, this._inc, this._new, _nextInc, _genmachine});
+//    }
 
     @Override
     public String toString() {
