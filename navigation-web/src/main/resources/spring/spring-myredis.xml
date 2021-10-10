@@ -2,20 +2,24 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns="http://www.springframework.org/schema/beans"
        xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        		           http://www.springframework.org/schema/beans/spring-beans.xsd
                        http://mybatis.org/schema/mybatis-spring
-                       http://mybatis.org/schema/mybatis-spring.xsd" default-autowire="byName">
+                       http://mybatis.org/schema/mybatis-spring.xsd
+                       http://www.springframework.org/schema/context
+                       https://www.springframework.org/schema/context/spring-context.xsd"
+       default-autowire="byName">
+
+
+    <context:property-placeholder location="classpath*:locationRedis.properties" ignore-unresolvable="true" />
 
     <bean id="myRedisConfig" class="com.pzc.myredis.MyJedisConfig">
         <property name="redisIps"
-                  value="127.0.0.1:7000,127.0.0.1:7001,127.0.0.1:7002"/>
-        <property name="passWord" value=""/>
+                  value="${redis.address}"/>
+        <property name="passWord" value="${redis.passWord}"/>
     </bean>
 
-    <!--<bean class="com.wchain.redis.ServiceCodeFactory">-->
-        <!--<constructor-arg ref="redisTemplate"/>-->
-    <!--</bean>-->
     <bean id="lockByRedisUtil" class="com.pzc.myredis.util.LockByRedisUtil"/>
 
     <bean id="myJedis" class="com.pzc.myredis.MyJedis" init-method="init">
