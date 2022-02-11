@@ -14,10 +14,11 @@
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="salt" jdbcType="VARCHAR" property="salt" />
     <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" />
+    <result column="has_hide_function" jdbcType="INTEGER" property="hasHideFunction" />
   </resultMap>
   <sql id="Base_Column_List">
     id, create_date, create_name, modify_date, modify_name, version, is_del, account, 
-    name, password, salt, avatar_url
+    name, password, salt, avatar_url, has_hide_function
   </sql>
 
   <sql id="selectTable">

@@ -8,7 +8,6 @@ import com.alibaba.dubbo.common.utils.StringUtils;
 //import com.github.pagehelper.PageInfo;
 import com.pzc.navigationweb.common.util.InitDOUtil;
 import com.pzc.navigationweb.common.util.Page;
-import com.pzc.navigationweb.common.util.Result;
 import com.pzc.navigationweb.common.util.UserSessionUtil;
 import com.pzc.navigationweb.constant.ImgConstants;
 import com.pzc.navigationweb.dao.CategoryDOMapper;
@@ -85,7 +84,7 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
             dtoList = navigationResourcesDOMapper.pageNavigation(query);
             dtoList.stream().forEach(x -> {
                 x.setCreateDateStr(DateUtil.formatDateTime(x.getCreateDate()));
-                FavoritesDO favoritesDO = favoritesDOMapper.selectByUserNavId(UserSessionUtil.getCurreentUserByKey().getId(),x.getId());
+                FavoritesDO favoritesDO = favoritesDOMapper.selectByUserNavId(UserSessionUtil.getCurrentUserByKey().getId(),x.getId());
                 x.setIsLiked( favoritesDO != null);
                 x.setLikeCount(favoritesDOMapper.countByNavId(x.getId()));
 
@@ -150,7 +149,7 @@ public class NavigationResourcesServiceImpl implements NavigationResourcesServic
 
 
         NavigationResourcesRespDTO respDTO = NavigationReqToDo.INSTANCE.doToResp(resourcesDO);
-        respDTO.setIsLiked(favoritesDOMapper.selectByUserNavId(UserSessionUtil.getCurreentUserByKey().getId(),id) != null);
+        respDTO.setIsLiked(favoritesDOMapper.selectByUserNavId(UserSessionUtil.getCurrentUserByKey().getId(),id) != null);
         respDTO.setCreateDateStr(DateUtil.formatDateTime(respDTO.getCreateDate()));
         respDTO.setLikeCount(favoritesDOMapper.countByNavId(id));
         return respDTO;

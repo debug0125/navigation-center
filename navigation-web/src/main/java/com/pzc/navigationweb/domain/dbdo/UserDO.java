@@ -25,4 +25,9 @@ public class UserDO extends BaseDO implements Serializable {
      * 头像
      */
     private String avatarUrl;
+
+    /**
+     * 是否拥有隐藏功能
+     */
+    private Integer hasHideFunction;
 }

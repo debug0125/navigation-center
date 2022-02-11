@@ -30,14 +30,14 @@ public class FavoriteController extends BaseController {
 
     @RequestMapping("/pageFavorite")
     public Result<Page<NavigationResourcesRespDTO>> pageFavorite(FavoriteQuery query) {
-        UserDO userDO = UserSessionUtil.getCurreentUserByKey();
+        UserDO userDO = UserSessionUtil.getCurrentUserByKey();
         query.setUserId(userDO.getId());
         return pageFavoriteProcess.start(query);
     }
 
     @RequestMapping("/toFavorite")
     public Result<NavigationResourcesRespDTO> toFavorite(NavToFavoriteReqDTO reqDTO) {
-        UserDO userDO = UserSessionUtil.getCurreentUserByKey();
+        UserDO userDO = UserSessionUtil.getCurrentUserByKey();
         reqDTO.setUserId(userDO.getId());
         return navToFavoriteProcess.start(reqDTO);
     }

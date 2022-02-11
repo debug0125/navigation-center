@@ -1,8 +1,6 @@
 package com.pzc.navigationweb.common.util;
 
 import com.pzc.navigationweb.domain.dbdo.UserDO;
-import org.apache.tomcat.util.http.fileupload.RequestContext;
-import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -29,13 +27,13 @@ public class UserSessionUtil {
     /**
      * 设置当前用户到session中
      */
-    public static void putCurrebtUser(UserDO userDO) {
+    public static void putCurrentUser(UserDO userDO) {
         HttpSession session = getSession();
         session.setAttribute(userDO.getToken(), userDO);
 //        RequestContext.get().put("userInfo", userInfoDTO);
     }
 
-    public static void putCurrebtUserBykey(UserDO userDO) {
+    public static void putCurrentUserBykey(UserDO userDO) {
         HttpSession session = getSession();
         session.setAttribute(UserSessionUtil.USER_INFO, userDO);
 //        RequestContext.get().put("userInfo", userInfoDTO);
@@ -52,7 +50,7 @@ public class UserSessionUtil {
         return new UserDO();
     }
 
-    public static UserDO getCurreentUserByKey() {
+    public static UserDO getCurrentUserByKey() {
         HttpSession session = getSession();
         if (session != null) {
             return (UserDO) session.getAttribute(UserSessionUtil.USER_INFO);

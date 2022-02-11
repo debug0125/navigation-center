@@ -40,7 +40,7 @@ public class Interceptor implements HandlerInterceptor {
         }
 
         //用户信息 存入上下文
-        UserSessionUtil.putCurrebtUserBykey(userDO);
+        UserSessionUtil.putCurrentUserBykey(userDO);
         return true;
     }
 
