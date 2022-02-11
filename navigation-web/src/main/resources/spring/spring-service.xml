@@ -12,6 +12,8 @@
     <bean id="lotteryInService" class="com.pzc.navigationweb.service.impl.LotteryInServiceImpl"/>
     <bean id="dictionaryInService" class="com.pzc.navigationweb.service.impl.DictionaryInServiceImpl"/>
 
+    <bean id="peopleCountInService" class="com.pzc.navigationweb.service.impl.PeopleCountInServiceImpl"/>
+
 
     <bean id="myBean" class="com.pzc.navigationweb.iocBean.AppConfig.MyBean" init-method="initTest"/>
 

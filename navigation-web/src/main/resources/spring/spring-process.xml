@@ -22,4 +22,8 @@
     <!--彩票系统-->
     <bean id="pageLotteryProcess" class="com.pzc.navigationweb.application.process.PageLotteryProcess"/>
     <bean id="addCustomLotteryNumProcess" class="com.pzc.navigationweb.application.process.AddCustomLotteryNumProcess"/>
+
+    <!--人员统计-->
+    <bean id="pageCountThemeProcess" class="com.pzc.navigationweb.application.process.PageCountThemeProcess"/>
+    <!--<bean id="addCustomLotteryNumProcess" class="com.pzc.navigationweb.application.process.AddCustomLotteryNumProcess"/>-->
 </beans>

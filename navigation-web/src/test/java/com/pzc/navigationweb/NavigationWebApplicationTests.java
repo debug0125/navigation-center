@@ -2,17 +2,23 @@ package com.pzc.navigationweb;
 
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.pagehelper.PageInfo;
 import com.pzc.navigationweb.application.process.PageFavoriteProcess;
+import com.pzc.navigationweb.common.util.Page;
 import com.pzc.navigationweb.common.util.RedisUtil;
 import com.pzc.navigationweb.common.util.Result;
+import com.pzc.navigationweb.domain.dbdo.CountThemeDO;
 import com.pzc.navigationweb.domain.dbdo.NavigationResourcesDO;
+import com.pzc.navigationweb.dto.query.CountThemeQuery;
 import com.pzc.navigationweb.dto.query.NavigationQuery;
 import com.pzc.navigationweb.dto.reqdto.LoginUser;
 import com.pzc.navigationweb.dto.reqdto.NavigationResourcesReqDTO;
+import com.pzc.navigationweb.dto.respdto.CountThemeRespDTO;
 import com.pzc.navigationweb.dto.respdto.NavigationResourcesRespDTO;
 import com.pzc.navigationweb.service.LoginService;
 import com.pzc.navigationweb.service.NavigationResourcesService;
+import com.pzc.navigationweb.service.PeopleCountInService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -86,6 +92,17 @@ class NavigationWebApplicationTests {
         logger.info(">>>>>>>>>>>>>>>>>>>>>>>123");
         System.out.println("123");
 
+    }
+
+    @Autowired
+    private PeopleCountInService peopleCountInService;
+    @Test
+    void countThemeTest() {
+        CountThemeQuery query = new CountThemeQuery();
+        query.setPageNo(1);
+        query.setPageSize(5);
+        Page<CountThemeRespDTO> countThemeDOIPage = peopleCountInService.pageCountTheme(query);
+        System.out.println("总数======》》》》" + countThemeDOIPage.getTotal());
     }
 
     public static void main(String[] args){

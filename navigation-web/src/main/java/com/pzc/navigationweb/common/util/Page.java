@@ -18,7 +18,7 @@ public class Page<T> implements Serializable, Iterable<T> {
     private int limit;
     private int offset;
 
-    public Page() {
+    public Page(Integer pageNo, Integer pageSize) {
     }
 
     public Page(int pageNumber, int pageSize, int totalCount) {
