@@ -64,10 +64,10 @@ class NavigationWebApplicationTests {
     @Test
     void register(){
         LoginUser loginUser = new LoginUser();
-        loginUser.setAccount("ryf");
+        loginUser.setAccount("test");
         loginUser.setName("痞子橙");
-        loginUser.setPassword("123456");
-        loginUser.setPasswordTwo("123456");
+        loginUser.setPassword("test123!@#");
+        loginUser.setPasswordTwo("test123!@#");
         loginService.register(loginUser);
 
     }
