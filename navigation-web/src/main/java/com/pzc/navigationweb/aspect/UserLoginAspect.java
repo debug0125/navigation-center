@@ -1,5 +1,6 @@
 package com.pzc.navigationweb.aspect;
 
+import cn.hutool.core.thread.ThreadFactoryBuilder;
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.pzc.navigationweb.aspect.annotation.Login;
 import com.pzc.navigationweb.common.util.*;
@@ -22,6 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author ryf
@@ -30,6 +35,13 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 public class UserLoginAspect {
+
+
+    private static ExecutorService loginPool = new ThreadPoolExecutor
+            (10, 500, 0L, TimeUnit.MILLISECONDS,
+                    new LinkedBlockingDeque<Runnable>(1024),
+                    new ThreadFactoryBuilder().setNamePrefix("userLogin-%d").build(),
+                    new ThreadPoolExecutor.AbortPolicy());
 
     @Autowired
     private LoginService loginService;
@@ -57,6 +69,9 @@ public class UserLoginAspect {
             RedisUtil.op().setVex(token, 60 * 60 * 4,userDO);
             // 存入cookie
             CookieUtil.saveCookie(userDO, httpResponse, value);
+//            loginPool.execute(() -> {
+//
+//            });
             result.setSuccess(true);
         }
         joinPoint.proceed();
