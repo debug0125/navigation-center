@@ -32,7 +32,6 @@ public class GetLotteryNumberTaskJob {
 
 
     private Logger logger = LoggerFactory.getLogger("task");
-    private Logger loggerP = LoggerFactory.getLogger("process");
 
     @Value("lottery.path")
     private String lotteryPath;
@@ -45,31 +44,36 @@ public class GetLotteryNumberTaskJob {
     @Scheduled(cron = "0 0 0 20 * ?")
     public void execute() {
 
-        logger.info("=======>>>> 进入定时器...");
+        logger.info("GetLotteryNumberTaskJob=======>>>> 进入定时器...");
         // 当前大乐透期号
         AtomicReference<String> currentMaxEventDate = new AtomicReference<>(lotteryInService.getMaxEventDate());
-        String currentYear = String.valueOf(DateUtil.year(new Date())).substring(2);
 
-        // 下一年则从头开始计算
-        if (!currentMaxEventDate.get().substring(0,2).equals(currentYear)) {
-            currentMaxEventDate.set(currentYear + "000");
+        String currentYear = String.valueOf(DateUtil.year(new Date())).substring(2);
+        if (currentMaxEventDate.get() == null) {
+            currentMaxEventDate = new AtomicReference<>(currentYear + "000");
+        } else {
+            // 下一年则从头开始计算
+            if (!currentMaxEventDate.get().substring(0, 2).equals(currentYear)) {
+                currentMaxEventDate.set(currentYear + "000");
+            }
         }
 
-        String path = "/Users/orange_r/Desktop/DLT.txt";
-//        String path = lotteryPath;
-        logger.info("=======>>>> 文件地址: {}", path);
+        String path = "/usr/local/DLT.txt";
 
         // 今日大乐透期号
         Integer todayEventDate = Integer.valueOf(currentMaxEventDate.get()) + 1;
 
+        AtomicReference<String> finalCurrentMaxEventDate = currentMaxEventDate;
         try {
             while (true) {
                 String url = "http://kaijiang.500.com/shtml/dlt/" + todayEventDate + ".shtml?0_ala_baidu";
 //                String url = "http://kaijiang.500.com/shtml/dlt/22055.shtml?0_ala_baidu";
                 String content = HttpUtil.get(url);
                 if (content.contains("<title>404 Not Found</title>")) {
+                    logger.info("GetLotteryNumberTaskJob=======>>>> 网页获取失败，当前期号：{}",todayEventDate);
                     return;
                 }
+                logger.info("GetLotteryNumberTaskJob=======>>>> 网页获取成功，当前期号：{}",todayEventDate);
                 File file = new File(path);
                 OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
                 osw.write(content);
@@ -99,15 +103,17 @@ public class GetLotteryNumberTaskJob {
                             logger.info(bugGroupInfo);
 
                             if (x.equals(regexNum) && StrUtil.isNotBlank(bugGroup)) {
-                                currentMaxEventDate.set(String.valueOf(finalTodayEventDate - 1));
-                                loggerP.info("todayEventDate: {}, currentMaxEventDate: {}",finalTodayEventDate,currentMaxEventDate.get());
+                                finalCurrentMaxEventDate.set(String.valueOf(finalTodayEventDate - 1));
                                 String[] aArr = bugGroupInfo.split(Pattern.quote("|"));
                                 LotteryReqDTO lotteryReqDTO = new LotteryReqDTO();
                                 lotteryReqDTO.setEventDate(finalTodayEventDate.toString());
                                 lotteryReqDTO.setNormalNum(Arrays.asList(aArr[0].split(" ")).stream().sorted().collect(Collectors.joining(" ")));
                                 lotteryReqDTO.setSpecialNum(Arrays.asList(aArr[1].split(" ")).stream().sorted().collect(Collectors.joining(" ")));
                                 lotteryReqDTO.setType(LotteryType.SYSTEM_NUM.getType());
+                                logger.info("GetLotteryNumberTaskJob=======>>>> 前五位：{}， 后两位：{}",lotteryReqDTO.getNormalNum(),lotteryReqDTO.getSpecialNum());
                                 lotteryInService.addCustomLotteryNumber(lotteryReqDTO);
+                            } else {
+                                logger.info("GetLotteryNumberTaskJob=======>>>> 当前期号：{}",bugGroupInfo);
                             }
 
                         }
@@ -119,11 +125,15 @@ public class GetLotteryNumberTaskJob {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-
+            // 在当前期号再增加一期
+            LotteryReqDTO lotteryReqDTO = new LotteryReqDTO();
+            lotteryReqDTO.setEventDate(String.valueOf((Integer.valueOf(finalCurrentMaxEventDate.get()) + 2)));
+            lotteryReqDTO.setType(LotteryType.SYSTEM_NUM.getType());
+            lotteryInService.addCustomLotteryNumber(lotteryReqDTO);
             // 维护最大期号
             DictionaryReqDTO reqDTO = new DictionaryReqDTO();
             reqDTO.setDicKey(RedisKeyConstant.DLT_DATE_KEY);
-            reqDTO.setDicValue(currentMaxEventDate.get());
+            reqDTO.setDicValue(finalCurrentMaxEventDate.get());
             dictionaryInService.editDictionaryByKey(reqDTO);
             File file = new File(path);
             if (file.exists()) {
@@ -133,6 +143,6 @@ public class GetLotteryNumberTaskJob {
     }
 
     public static void main(String[] args) {
-        System.out.println(String.valueOf(DateUtil.year(new Date())).substring(2));
+        System.out.println(new AtomicReference<>(null).get());
     }
 }

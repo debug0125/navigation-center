@@ -82,8 +82,20 @@ public class LotteryInServiceImpl implements LotteryInService {
     @Override
     public boolean addCustomLotteryNumber(LotteryReqDTO lotteryReqDTO) {
         String maxEventDate = StrUtil.isNotBlank(lotteryReqDTO.getEventDate()) ? lotteryReqDTO.getEventDate() : this.getMaxEventDate();
-        if (lotteryDOMapper.existEventDate(maxEventDate) != null) {
-            return false;
+        if (lotteryReqDTO.getType() == LotteryType.SYSTEM_NUM.getType()) {
+            String id = lotteryDOMapper.existEventDate(maxEventDate);
+            if (id != null) {
+                LotteryDO lotteryDO = new LotteryDO();
+                lotteryDO.setNormalNum(lotteryReqDTO.getNormalNum());
+                lotteryDO.setSpecialNum(lotteryReqDTO.getSpecialNum());
+                lotteryDO.setId(id);
+                if (StrUtil.isBlank(lotteryDO.getNormalNum()) && StrUtil.isBlank(lotteryDO.getSpecialNum())) {
+                    return false;
+                }
+                return lotteryDOMapper.updateByPrimaryKeySelective(lotteryDO) > 0;
+            }
+        } else {
+            maxEventDate = lotteryDOMapper.getMaxEventDate();
         }
         LotteryDO lotteryDO = new LotteryDO();
         InitDOUtil.initField(lotteryDO);
@@ -111,7 +123,9 @@ public class LotteryInServiceImpl implements LotteryInService {
     }
 
     private static String getFormatNum(String s){
-
+        if (StrUtil.isBlank(s)) {
+            return StrUtil.EMPTY;
+        }
         List<String> stringList = Arrays.asList(s.split(" "));
         stringList = stringList.stream().map(num -> {
             return String.format("%02d",Integer.valueOf(num));
