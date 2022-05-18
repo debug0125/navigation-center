@@ -141,8 +141,4 @@ public class GetLotteryNumberTaskJob {
             }
         }
     }
-
-    public static void main(String[] args) {
-        System.out.println(new AtomicReference<>(null).get());
-    }
 }
