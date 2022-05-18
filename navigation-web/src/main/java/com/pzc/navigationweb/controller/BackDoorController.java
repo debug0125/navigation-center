@@ -1,5 +1,6 @@
 package com.pzc.navigationweb.controller;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.pzc.navigationweb.application.process.AddCustomLotteryNumProcess;
 import com.pzc.navigationweb.application.process.PageLotteryProcess;
 import com.pzc.navigationweb.common.util.Page;
@@ -24,22 +25,13 @@ import java.util.concurrent.*;
 public class BackDoorController extends BaseController {
     public static final String PAGE_NAME = "/backDooor";
 
-    ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 10,
-            60L, TimeUnit.SECONDS,
-            new LinkedBlockingDeque<>());
-
     @Autowired
     private GetLotteryNumberTaskJob getLotteryNumberTaskJob;
 
     @RequestMapping("/getLotteryNumberTaskJob")
     @ResponseBody
     public String getLotteryNumberTaskJob() {
-        threadPoolExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                getLotteryNumberTaskJob.execute();
-            }
-        });
-        return "正在拉取大乐透数据，请稍等查看...";
+        getLotteryNumberTaskJob.execute();
+        return "拉取大乐透数据成功，请到页面查看...";
     }
 }

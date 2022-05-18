@@ -58,7 +58,8 @@ public class GetLotteryNumberTaskJob {
             }
         }
 
-        String path = "/usr/local/DLT.txt";
+//        String path = "/tmp/DLT.txt";
+        String path =  "/Users/orange_r/Desktop/DLT.txt";
 
         // 今日大乐透期号
         Integer todayEventDate = Integer.valueOf(currentMaxEventDate.get()) + 1;
