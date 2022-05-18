@@ -26,4 +26,8 @@ public interface LotteryDOMapper {
     int updateByPrimaryKeySelective(LotteryDO record);
 
     int updateByPrimaryKey(LotteryDO record);
+
+    String getMaxEventDate();
+
+    String existEventDate(String eventDate);
 }

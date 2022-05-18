@@ -36,8 +36,12 @@ public class DictionaryInServiceImpl implements DictionaryInService {
         String value = "";
         if (dictionaryReqDTO.getDicKey().equalsIgnoreCase(RedisKeyConstant.DLT_DATE_KEY)) {
             DictionaryDO dictionaryDO = dictionaryDOMapper.selectByPrimaryKey(dictionaryReqDTO.getDicKey());
-            String eventDate = this.getDLTListInfo().get(0);
-            value = String.valueOf(Integer.valueOf(eventDate) + 1);
+            String currentEventDate = dictionaryReqDTO.getDicValue();
+            if (StrUtil.isBlank(currentEventDate)) {
+                currentEventDate = getDLTListInfo().get(0);
+            }
+
+            value = String.valueOf(Integer.valueOf(currentEventDate) + 1);
             if (dictionaryDO != null) {
                 dictionaryDO.setDicValue(value);
                 dictionaryDOMapper.updateByPrimaryKey(dictionaryDO);
@@ -58,7 +62,7 @@ public class DictionaryInServiceImpl implements DictionaryInService {
     private List<String> getDLTListInfo() {
         List<String> resultList = new ArrayList<>();
         String path = "/Users/orange_r/Desktop/DLT.txt";
-        String url = "http://kaijiang.500.com/shtml/dlt/21092.shtml?0_ala_baidu";
+        String url = "http://kaijiang.500.com/shtml/dlt/22001.shtml?0_ala_baidu";
         List<String> regexList = null;
         try {
             String content = HttpUtil.get(url);

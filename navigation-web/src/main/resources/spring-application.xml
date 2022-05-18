@@ -15,6 +15,7 @@
     <import resource="spring/spring-process.xml"/>
     <import resource="spring/spring-myredis.xml"/>
     <import resource="spring/spring-aop-context.xml"/>
+    <import resource="spring/spring-elastic-job.xml"/>
     <!--<import resource="spring/spring-dubbo-config.xml"/>-->
     <!--<import resource="spring/spring-dubbo-provider.xml"/>-->
     <!--<import resource="spring/spring-help-service.xml"/>-->

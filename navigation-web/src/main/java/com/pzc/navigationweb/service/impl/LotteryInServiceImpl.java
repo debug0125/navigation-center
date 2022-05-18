@@ -81,12 +81,9 @@ public class LotteryInServiceImpl implements LotteryInService {
 
     @Override
     public boolean addCustomLotteryNumber(LotteryReqDTO lotteryReqDTO) {
-        String maxEventDate = RedisUtil.op().getV(RedisKeyConstant.DLT_DATE_KEY);
-        if (StrUtil.isBlank(maxEventDate)) {
-            // 查询字典表，并推送至redis
-            DictionaryReqDTO reqDTO = new DictionaryReqDTO();
-            reqDTO.setDicKey(RedisKeyConstant.DLT_DATE_KEY);
-            maxEventDate = dictionaryInService.editDictionaryByKey(reqDTO);
+        String maxEventDate = StrUtil.isNotBlank(lotteryReqDTO.getEventDate()) ? lotteryReqDTO.getEventDate() : this.getMaxEventDate();
+        if (lotteryDOMapper.existEventDate(maxEventDate) != null) {
+            return false;
         }
         LotteryDO lotteryDO = new LotteryDO();
         InitDOUtil.initField(lotteryDO);
@@ -96,8 +93,21 @@ public class LotteryInServiceImpl implements LotteryInService {
 
         lotteryDO.setSpecialNum(getFormatNum(lotteryReqDTO.getSpecialNum()));
 
-        lotteryDO.setType(LotteryType.CUSTOM_NUM.getType());
+        lotteryDO.setType(lotteryReqDTO.getType());
         return lotteryDOMapper.insertSelective(lotteryDO) > 0;
+    }
+
+    @Override
+    public String getMaxEventDate() {
+        String maxEventDate = RedisUtil.op().getV(RedisKeyConstant.DLT_DATE_KEY);
+        if (StrUtil.isBlank(maxEventDate)) {
+            // 查询字典表，并推送至redis
+            DictionaryReqDTO reqDTO = new DictionaryReqDTO();
+            reqDTO.setDicKey(RedisKeyConstant.DLT_DATE_KEY);
+            // 获取当前最大期号
+            maxEventDate = lotteryDOMapper.getMaxEventDate();
+        }
+        return maxEventDate;
     }
 
     private static String getFormatNum(String s){

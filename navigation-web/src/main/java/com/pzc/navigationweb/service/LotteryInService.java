@@ -24,4 +24,6 @@ public interface LotteryInService {
      * @return
      */
     boolean addCustomLotteryNumber(LotteryReqDTO lotteryReqDTO);
+
+    String getMaxEventDate();
 }

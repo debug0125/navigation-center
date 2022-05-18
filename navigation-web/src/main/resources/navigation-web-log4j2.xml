@@ -35,6 +35,11 @@
             <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
             <SizeBasedTriggeringPolicy size="100MB"/>
         </RollingFile>
+        <RollingFile name="taskLog" fileName="${LOG_HOME}/task.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/process-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <SizeBasedTriggeringPolicy size="100MB"/>
+        </RollingFile>
         <!-- 项目日志目录，名称根据模块命名 -->
         <RollingFile name="${PROJECT_NAME_CAMEL}Log" fileName="${LOG_HOME}/${PROJECT_NAME}.log"
                      filePattern="${LOG_HOME}/$${date:yyyy-MM}/${PROJECT_NAME}-%d{MM-dd-yyyy}-%i.log.gz">
@@ -70,6 +75,9 @@
         </logger>
         <logger name="process" level="debug" additivity="false">
             <AppenderRef ref="processLog"/>
+        </logger>
+        <logger name="task" level="debug" additivity="false">
+            <AppenderRef ref="taskLog"/>
         </logger>
         <!-- mybatis配置 -->
         <logger name="${MYBATIS_MAPPER_PATH}" level="debug" additivity="false">
