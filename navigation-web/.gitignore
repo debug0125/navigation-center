@@ -1,8 +1,11 @@
 HELP.md
 target/
+/navigation-web/src/test/*
+.gitignore
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+!**/src/test/*
 
 ### STS ###
 .apt_generated
