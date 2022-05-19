@@ -23,6 +23,7 @@ target/
 *.ipr
 *.properties
 banner.txt
+NavigationWebApplicationTests.java
 
 ### NetBeans ###
 /nbproject/private/

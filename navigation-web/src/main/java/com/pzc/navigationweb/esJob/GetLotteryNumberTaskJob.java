@@ -33,15 +33,12 @@ public class GetLotteryNumberTaskJob {
 
     private Logger logger = LoggerFactory.getLogger("task");
 
-    @Value("lottery.path")
-    private String lotteryPath;
-
     @Autowired
     private LotteryInService lotteryInService;
     @Autowired
     private DictionaryInService dictionaryInService;
 
-    @Scheduled(cron = "0 0 0 20 * ?")
+    @Scheduled(cron = "0 20 20 * * ? ")
     public void execute() {
 
         logger.info("GetLotteryNumberTaskJob=======>>>> 进入定时器...");
@@ -58,8 +55,8 @@ public class GetLotteryNumberTaskJob {
             }
         }
 
-//        String path = "/tmp/DLT.txt";
-        String path =  "/Users/orange_r/Desktop/DLT.txt";
+        String path = "/tmp/DLT.txt";
+//        String path =  "/Users/orange_r/Desktop/DLT.txt";
 
         // 今日大乐透期号
         Integer todayEventDate = Integer.valueOf(currentMaxEventDate.get()) + 1;
