@@ -12,12 +12,12 @@ import com.pzc.navigationweb.service.LotteryInService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,8 +38,10 @@ public class GetLotteryNumberTaskJob {
     @Autowired
     private DictionaryInService dictionaryInService;
 
-    @Scheduled(cron = "0 20 20 * * ? ")
+    @Scheduled(cron = "0 10 20 ? * MON,WED,SAT")
     public void execute() {
+
+        AtomicBoolean isLevelMaxEventDate = new AtomicBoolean(false);
 
         logger.info("GetLotteryNumberTaskJob=======>>>> 进入定时器...");
         // 当前大乐透期号
@@ -110,6 +112,7 @@ public class GetLotteryNumberTaskJob {
                                 lotteryReqDTO.setType(LotteryType.SYSTEM_NUM.getType());
                                 logger.info("GetLotteryNumberTaskJob=======>>>> 前五位：{}， 后两位：{}",lotteryReqDTO.getNormalNum(),lotteryReqDTO.getSpecialNum());
                                 lotteryInService.addCustomLotteryNumber(lotteryReqDTO);
+                                isLevelMaxEventDate.set(true);
                             } else {
                                 logger.info("GetLotteryNumberTaskJob=======>>>> 当前期号：{}",bugGroupInfo);
                             }
@@ -123,16 +126,18 @@ public class GetLotteryNumberTaskJob {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            // 在当前期号再增加一期
-            LotteryReqDTO lotteryReqDTO = new LotteryReqDTO();
-            lotteryReqDTO.setEventDate(String.valueOf((Integer.valueOf(finalCurrentMaxEventDate.get()) + 2)));
-            lotteryReqDTO.setType(LotteryType.SYSTEM_NUM.getType());
-            lotteryInService.addCustomLotteryNumber(lotteryReqDTO);
-            // 维护最大期号
-            DictionaryReqDTO reqDTO = new DictionaryReqDTO();
-            reqDTO.setDicKey(RedisKeyConstant.DLT_DATE_KEY);
-            reqDTO.setDicValue(finalCurrentMaxEventDate.get());
-            dictionaryInService.editDictionaryByKey(reqDTO);
+            if (isLevelMaxEventDate.get()) {
+                // 在当前期号再增加一期
+                LotteryReqDTO lotteryReqDTO = new LotteryReqDTO();
+                lotteryReqDTO.setEventDate(String.valueOf((Integer.valueOf(finalCurrentMaxEventDate.get()) + 2)));
+                lotteryReqDTO.setType(LotteryType.SYSTEM_NUM.getType());
+                lotteryInService.addCustomLotteryNumber(lotteryReqDTO);
+                // 维护最大期号
+                DictionaryReqDTO reqDTO = new DictionaryReqDTO();
+                reqDTO.setDicKey(RedisKeyConstant.DLT_DATE_KEY);
+                reqDTO.setDicValue(finalCurrentMaxEventDate.get());
+                dictionaryInService.editDictionaryByKey(reqDTO);
+            }
             File file = new File(path);
             if (file.exists()) {
                 file.delete();
