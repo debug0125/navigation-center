@@ -81,21 +81,19 @@ public class LotteryInServiceImpl implements LotteryInService {
 
     @Override
     public boolean addCustomLotteryNumber(LotteryReqDTO lotteryReqDTO) {
-        String maxEventDate = StrUtil.isNotBlank(lotteryReqDTO.getEventDate()) ? lotteryReqDTO.getEventDate() : this.getMaxEventDate();
+        String maxEventDate = StrUtil.isNotBlank(lotteryReqDTO.getEventDate()) ? lotteryReqDTO.getEventDate() : this.getMaxEventDateByDb();
         if (lotteryReqDTO.getType() == LotteryType.SYSTEM_NUM.getType()) {
             String id = lotteryDOMapper.existEventDate(maxEventDate);
             if (id != null) {
+                if (StrUtil.isBlank(lotteryReqDTO.getNormalNum()) && StrUtil.isBlank(lotteryReqDTO.getSpecialNum())) {
+                    return false;
+                }
                 LotteryDO lotteryDO = new LotteryDO();
                 lotteryDO.setNormalNum(lotteryReqDTO.getNormalNum());
                 lotteryDO.setSpecialNum(lotteryReqDTO.getSpecialNum());
                 lotteryDO.setId(id);
-                if (StrUtil.isBlank(lotteryDO.getNormalNum()) && StrUtil.isBlank(lotteryDO.getSpecialNum())) {
-                    return false;
-                }
                 return lotteryDOMapper.updateByPrimaryKeySelective(lotteryDO) > 0;
             }
-        } else {
-            maxEventDate = lotteryDOMapper.getMaxEventDate();
         }
         LotteryDO lotteryDO = new LotteryDO();
         InitDOUtil.initField(lotteryDO);
@@ -110,16 +108,22 @@ public class LotteryInServiceImpl implements LotteryInService {
     }
 
     @Override
-    public String getMaxEventDate() {
+    public String getOpenMaxEventDate() {
         String maxEventDate = RedisUtil.op().getV(RedisKeyConstant.DLT_DATE_KEY);
         if (StrUtil.isBlank(maxEventDate)) {
             // 查询字典表，并推送至redis
             DictionaryReqDTO reqDTO = new DictionaryReqDTO();
             reqDTO.setDicKey(RedisKeyConstant.DLT_DATE_KEY);
             // 获取当前最大期号
-            maxEventDate = lotteryDOMapper.getMaxEventDate();
+            maxEventDate = lotteryDOMapper.getOpenMaxEventDate();
+            RedisUtil.op().setV(RedisKeyConstant.DLT_DATE_KEY,maxEventDate);
         }
         return maxEventDate;
+    }
+
+    @Override
+    public String getMaxEventDateByDb() {
+        return lotteryDOMapper.getMaxEventDate();
     }
 
     private static String getFormatNum(String s){

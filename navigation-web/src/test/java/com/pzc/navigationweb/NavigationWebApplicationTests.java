@@ -1,5 +1,6 @@
 package com.pzc.navigationweb;
 
+import com.pzc.navigationweb.constant.RedisKeyConstant;
 import com.pzc.navigationweb.esJob.GetLotteryNumberTaskJob;
 import com.pzc.navigationweb.application.process.PageFavoriteProcess;
 import com.pzc.navigationweb.common.util.Page;
@@ -46,10 +47,10 @@ class NavigationWebApplicationTests {
     @Test
     void register(){
         LoginUser loginUser = new LoginUser();
-        loginUser.setAccount("test");
-        loginUser.setName("痞子橙");
-        loginUser.setPassword("test123!@#");
-        loginUser.setPasswordTwo("test123!@#");
+        loginUser.setAccount("tian");
+        loginUser.setName("小田");
+        loginUser.setPassword("tian123");
+        loginUser.setPasswordTwo("tian123");
         loginService.register(loginUser);
 
     }
@@ -60,8 +61,10 @@ class NavigationWebApplicationTests {
 //        System.out.println((String) RedisUtil.op().getV("name"));
 //        Long testLong = RedisUtil.op().incrV("test");
 //        System.out.println(">>>>>>>>>>>>>>>>>>>>" + testLong);
-        String spuCode = RedisUtil.op().getSpuCode("JM");
-        System.out.println(">>>>>>>>>>>>>>>>>>>>" + spuCode);
+//        String spuCode = RedisUtil.op().getSpuCode("JM");
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>" + spuCode);
+
+        RedisUtil.op().setV(RedisKeyConstant.DLT_DATE_KEY,"22055");
 
     }
 

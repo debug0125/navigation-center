@@ -45,7 +45,7 @@ public class GetLotteryNumberTaskJob {
 
         logger.info("GetLotteryNumberTaskJob=======>>>> 进入定时器...");
         // 当前大乐透期号
-        AtomicReference<String> currentMaxEventDate = new AtomicReference<>(lotteryInService.getMaxEventDate());
+        AtomicReference<String> currentMaxEventDate = new AtomicReference<>(lotteryInService.getOpenMaxEventDate());
 
         String currentYear = String.valueOf(DateUtil.year(new Date())).substring(2);
         if (currentMaxEventDate.get() == null) {

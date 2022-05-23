@@ -269,11 +269,18 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
+    <select id="getOpenMaxEventDate" resultType="java.lang.String">
+        select event_date from
+        <include refid="table_name"/>
+        where is_del = 0 and normal_num != '' and type = 1
+        group by event_date desc limit 1;
+    </select>
+
     <select id="getMaxEventDate" resultType="java.lang.String">
         select event_date from
         <include refid="table_name"/>
         where is_del = 0
-        group by event_date desc limit 1
+        group by event_date desc limit 1;
     </select>
 
     <select id="existEventDate" resultType="java.lang.String">

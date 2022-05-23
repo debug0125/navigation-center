@@ -2,7 +2,6 @@ package com.pzc.navigationweb.dao;
 
 import com.pzc.navigationweb.domain.dbdo.LotteryDO;
 import com.pzc.navigationweb.dto.query.LotteryQuery;
-import com.pzc.navigationweb.dto.reqdto.LotteryReqDTO;
 
 import java.util.List;
 
@@ -26,6 +25,8 @@ public interface LotteryDOMapper {
     int updateByPrimaryKeySelective(LotteryDO record);
 
     int updateByPrimaryKey(LotteryDO record);
+
+    String getOpenMaxEventDate();
 
     String getMaxEventDate();
 
