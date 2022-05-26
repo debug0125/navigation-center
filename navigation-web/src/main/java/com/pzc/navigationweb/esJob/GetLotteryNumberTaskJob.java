@@ -38,7 +38,7 @@ public class GetLotteryNumberTaskJob {
     @Autowired
     private DictionaryInService dictionaryInService;
 
-    @Scheduled(cron = "0 10 20 ? * MON,WED,SAT")
+    @Scheduled(cron = "0 0 21 ? * MON,WED,SAT")
     public void execute() {
 
         AtomicBoolean isLevelMaxEventDate = new AtomicBoolean(false);
