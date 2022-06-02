@@ -11,6 +11,7 @@ import com.pzc.navigationweb.dto.respdto.CountThemeRespDTO;
 import com.pzc.navigationweb.service.LoginService;
 import com.pzc.navigationweb.service.NavigationResourcesService;
 import com.pzc.navigationweb.service.PeopleCountInService;
+import com.pzc.navigationweb.service.TestInService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -30,9 +31,16 @@ class NavigationWebApplicationTests {
     private NavigationResourcesService navigationResourcesService;
     @Autowired
     private LoginService loginService;
+    @Autowired
+    private TestInService testInService;
 
     @Test
     void contextLoads() {
+    }
+
+    @Test
+    void rollBackTest() {
+        testInService.testRollBack();
     }
 
     @Test

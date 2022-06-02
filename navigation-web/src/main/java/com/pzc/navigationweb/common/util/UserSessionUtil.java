@@ -55,7 +55,7 @@ public class UserSessionUtil {
         if (session != null) {
             return (UserDO) session.getAttribute(UserSessionUtil.USER_INFO);
         }
-        return new UserDO();
+        return null;
     }
 
     public static void removeCurreentUser(String token) {

@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,6 +92,7 @@ public class LotteryInServiceImpl implements LotteryInService {
                 LotteryDO lotteryDO = new LotteryDO();
                 lotteryDO.setNormalNum(lotteryReqDTO.getNormalNum());
                 lotteryDO.setSpecialNum(lotteryReqDTO.getSpecialNum());
+                lotteryDO.setModifyDate(new Date());
                 lotteryDO.setId(id);
                 return lotteryDOMapper.updateByPrimaryKeySelective(lotteryDO) > 0;
             }
