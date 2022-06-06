@@ -3,9 +3,9 @@
     <Properties>
         <!--  日志路径参数，这里所有项目统一变量log.path -->
         <!--本地日志路径-->
-        <Property name="LOG_HOME">/Users/orange_r/myProject/navigation-center/navigation-web/log</Property>
+        <!--<Property name="LOG_HOME">/Users/orange_r/myProject/navigation-center/navigation-web/log</Property>-->
         <!--腾讯云日志路径-->
-        <!--<Property name="LOG_HOME">/data/server/navigation-web/log</Property>-->
+        <Property name="LOG_HOME">/data/server/navigation-web/log</Property>
         <!-- 这两个参数根据项目改 -->
         <Property name="PROJECT_NAME">navigation-web</Property>
         <Property name="PROJECT_NAME_CAMEL">navigationWeb</Property>
