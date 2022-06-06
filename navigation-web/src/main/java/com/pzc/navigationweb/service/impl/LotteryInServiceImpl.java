@@ -98,7 +98,11 @@ public class LotteryInServiceImpl implements LotteryInService {
             }
         }
         LotteryDO lotteryDO = new LotteryDO();
-        InitDOUtil.initField(lotteryDO);
+        if (StrUtil.isNotBlank(lotteryReqDTO.getId())) {
+            InitDOUtil.req2DO(lotteryReqDTO,lotteryDO);
+        } else {
+            InitDOUtil.initField(lotteryDO);
+        }
         lotteryDO.setEventDate(maxEventDate);
 
         lotteryDO.setNormalNum(getFormatNum(lotteryReqDTO.getNormalNum()));

@@ -47,7 +47,13 @@ public class DictionaryInServiceImpl implements DictionaryInService {
                 dictionaryDOMapper.updateByPrimaryKey(dictionaryDO);
             } else {
                 dictionaryDO = new DictionaryDO();
-                InitDOUtil.initField(dictionaryDO);
+
+                if (StrUtil.isNotBlank(dictionaryReqDTO.getId())) {
+                    InitDOUtil.req2DO(dictionaryReqDTO,dictionaryDO);
+                } else {
+                    InitDOUtil.initField(dictionaryDO);
+                }
+
                 dictionaryDO.setDicValue(value);
                 dictionaryDO.setDicKey(dictionaryReqDTO.getDicKey());
                 dictionaryDOMapper.insertSelective(dictionaryDO);

@@ -1,7 +1,9 @@
 package com.pzc.navigationweb.common.util;
 
+import com.pzc.navigationweb.domain.dbdo.BaseDO;
 import com.pzc.navigationweb.domain.dbdo.BaseDOInt;
 import com.pzc.navigationweb.domain.dbdo.UserDO;
+import com.pzc.navigationweb.dto.basedto.ReqDTO;
 
 import java.util.Date;
 
@@ -49,5 +51,36 @@ public class InitDOUtil {
         doInt.setModifyName(userDO.getName());
         doInt.setModifyDate(new Date());
         doInt.setVersion(doInt.getVersion() + 1);
+    }
+
+    public static <T extends ReqDTO> void buildSysUser(T t) {
+        t.setId(ObjectId.get().toHexString());
+        t.setCreateDate(new Date());
+        t.setModifyDate(new Date());
+        t.setVersion(1);
+        t.setIsDel(false);
+
+        t.setCreateId(InitDOUtil.ID);
+        t.setCreateAccount(InitDOUtil.ACCOUNT);
+        t.setCreateName(InitDOUtil.NAME);
+        t.setModifyId(InitDOUtil.ID);
+        t.setModifyAccount(InitDOUtil.ACCOUNT);
+        t.setModifyName(InitDOUtil.NAME);
+    }
+
+    public static <P extends ReqDTO, M extends BaseDO> void req2DO(P p, M m) {
+
+        m.setId(p.getId());
+        m.setCreateDate(p.getCreateDate());
+        m.setModifyDate(p.getModifyDate());
+        m.setVersion(p.getVersion());
+        m.setIsDel(p.getIsDel());
+
+        m.setCreateId(p.getCreateId());
+        m.setCreateAccount(p.getCreateAccount());
+        m.setCreateName(p.getCreateName());
+        m.setModifyId(p.getModifyId());
+        m.setModifyAccount(p.getModifyAccount());
+        m.setModifyName(p.getModifyName());
     }
 }

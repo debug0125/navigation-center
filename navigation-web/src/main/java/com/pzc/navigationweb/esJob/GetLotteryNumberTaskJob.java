@@ -3,6 +3,7 @@ package com.pzc.navigationweb.esJob;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
+import com.pzc.navigationweb.common.util.InitDOUtil;
 import com.pzc.navigationweb.constant.RedisKeyConstant;
 import com.pzc.navigationweb.constant.enumtype.LotteryType;
 import com.pzc.navigationweb.dto.reqdto.DictionaryReqDTO;
@@ -129,11 +130,13 @@ public class GetLotteryNumberTaskJob {
             if (isLevelMaxEventDate.get()) {
                 // 在当前期号再增加一期
                 LotteryReqDTO lotteryReqDTO = new LotteryReqDTO();
+                InitDOUtil.buildSysUser(lotteryReqDTO);
                 lotteryReqDTO.setEventDate(String.valueOf((Integer.valueOf(finalCurrentMaxEventDate.get()) + 2)));
                 lotteryReqDTO.setType(LotteryType.SYSTEM_NUM.getType());
                 lotteryInService.addCustomLotteryNumber(lotteryReqDTO);
                 // 维护最大期号
                 DictionaryReqDTO reqDTO = new DictionaryReqDTO();
+                InitDOUtil.buildSysUser(reqDTO);
                 reqDTO.setDicKey(RedisKeyConstant.DLT_DATE_KEY);
                 reqDTO.setDicValue(finalCurrentMaxEventDate.get());
                 dictionaryInService.editDictionaryByKey(reqDTO);
