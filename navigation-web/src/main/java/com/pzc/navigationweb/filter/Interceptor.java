@@ -23,8 +23,14 @@ import java.io.PrintWriter;
 public class Interceptor implements HandlerInterceptor {
     private static final Logger log = LoggerFactory.getLogger(Interceptor.class);
 
+    private final String WHITE_PATH = "/backDooor";
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
+        String path = request.getServletPath();
+        if (path.startsWith(WHITE_PATH)) {
+            return true;
+        }
         String token = CookieUtil.getCookie(request, LoginTokenConstant.TOKEN_KEY);
 //        UserDO userDO = UserSessionUtil.getCurreentUser(token);
         if (StrUtil.isBlank(token)) {

@@ -108,6 +108,31 @@ public class MyJedisCluster extends JedisCluster {
 
     }
 
+    public boolean setIfAbsent(Object key, Object val) {
+
+        if (key == null) {
+            throw new MyRedisException(MyRedisErrorEnum.KEY_IS_NULL);
+        }
+
+        byte[] keyBytes = HessianSerializerUtil.serialize(key);
+        byte[] valBytes = HessianSerializerUtil.serialize(val);
+
+        return super.setnx(keyBytes, valBytes) > 0;
+
+    }
+
+    public void expireV(Object key,Long seconds) {
+
+        if (key == null) {
+            throw new MyRedisException(MyRedisErrorEnum.KEY_IS_NULL);
+        }
+
+        byte[] keyBytes = HessianSerializerUtil.serialize(key);
+
+        super.expire(keyBytes, seconds.intValue()) ;
+
+    }
+
     public void delV(Object key) {
 
         if (key == null) {
