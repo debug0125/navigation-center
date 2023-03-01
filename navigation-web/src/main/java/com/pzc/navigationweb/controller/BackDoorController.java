@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.*;
 
 /**
  * @author ryf
@@ -50,11 +49,18 @@ public class BackDoorController extends BaseController {
     @ResponseBody
     public String testRedisLock(Long userId) {
         try {
-            for (int i = 0; i < 20; i++) {
-                Thread.sleep(1000);
+//            for (int i = 0; i < 20; i++) {
+//                Thread.sleep(1000);
+//
+//                System.out.println("打印>>>> " + i + ",时间：" + DateUtil.format(LocalDateTime.now(), DatePattern.NORM_DATETIME_PATTERN));
+//            }
+            Thread.sleep(1000);
+            System.out.println("打印>>>> ,时间：" + DateUtil.format(LocalDateTime.now(), DatePattern.NORM_DATETIME_PATTERN));
+            logger.info("控制层线程名:  {}", Thread.currentThread().getName());
 
-                System.out.println("打印>>>> " + i + ",时间：" + DateUtil.format(LocalDateTime.now(), DatePattern.NORM_DATETIME_PATTERN));
-            }
+            ThreadLocal local = new ThreadLocal();
+
+            logger.info("ThreadLocal 传值： ", local.get());
             logger.info("逻辑执行完成");
         } catch (InterruptedException e) {
             logger.error("方法出现异常");

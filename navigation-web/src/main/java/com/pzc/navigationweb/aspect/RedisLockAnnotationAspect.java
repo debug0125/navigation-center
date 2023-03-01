@@ -72,6 +72,10 @@ public class RedisLockAnnotationAspect {
             RedisWatchDogTaskJob.holderList.add(new RedisLockDefinitionHolder(businessKey, annotation.lockTime(), System.currentTimeMillis(),
                     currentThread, annotation.tryCount()));
 
+            logger.info("切面线程名:  {}", currentThread.getName());
+
+            ThreadLocal local = new ThreadLocal();
+            local.set(uniqueValue);
             result = joinPoint.proceed();
 
             if (currentThread.isInterrupted()) {

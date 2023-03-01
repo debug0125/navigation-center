@@ -39,12 +39,14 @@ public class RedisWatchDogTaskJob {
                     // 判空
                     if (holder == null) {
                         iterator.remove();
+                        logger.info("无任务，取消");
                         continue;
                     }
                     // 判断 key 是否还有效，无效的话进行移除
 
                     if (RedisUtil.op().getV(holder.getBusinessKey()) == null) {
                         iterator.remove();
+                        logger.info("无key，取消");
                         continue;
                     }
                     // 超时重试次数，超过时给线程设定中断
