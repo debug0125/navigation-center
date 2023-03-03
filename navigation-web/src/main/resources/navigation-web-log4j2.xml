@@ -70,7 +70,7 @@
 
         <logger name="org.quartz.core.QuartzSchedulerThread" level="error"/>
         <!-- 公共配置  -->
-        <root level="DEBUG">
+        <root level="info">
             <appender-ref ref="Console"/>
         </root>
         <logger name="${PROJECT_NAME_CAMEL}Log" level="debug" additivity="false">
@@ -88,6 +88,8 @@
         </logger>
 
         <!--其他额外自定义配置-->
+        <logger name="org.springframework" level="error"/>
+        <logger name="org.mybatis.logging.Logger" level="error"/>
 
     </loggers>
 </configuration>
